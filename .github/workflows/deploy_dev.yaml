@@ -102,4 +102,5 @@ jobs:
         run: aws cloudfront create-invalidation --distribution-id ${{ env.CF_ID }} --paths "/*"
 
       - name: Output CF domain
+
         run: echo "${{ env.CF_DOMAIN }}"
