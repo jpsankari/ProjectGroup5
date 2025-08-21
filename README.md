@@ -1,11 +1,11 @@
-# CapstoneProject-DevOps-CICDpipeline Group 2
+# CapstoneProject-DevOps-CICDpipeline Group 5
 
 ## Team Member:
-1. Aldin Dela Cruz
-2. Benjamin Paton
-3. Tommy Chua
-4. Joanne Wang Baojuan
-5. Ryan Wang Xin
+1. Vincent
+2. Siva Sankari
+3. Christine
+4. JohnBosco
+5. Sandhya Karanam
 </ul>
 <p>Students of PaCE@NTU enrolled in the SCTP Cloud Infrastructure Engineering course.</p>
 
@@ -14,7 +14,7 @@
 <h3>Project Overview</h3>
 <ul>
     <li><strong>Project Name:</strong> CI/CD Pipeline for Web App Deployment on AWS ECS</li>
-    <li><strong>Repository:</strong> GitHub Repository - [https://github.com/su-ntu-ctp/cp-cohort6-group2]</li>
+    <li><strong>Repository:</strong> GitHub Repository - [https://github.com/sandhyakaranam88/project-test]</li>
 </ul>
 
 <hr>
@@ -46,7 +46,7 @@ To create a high-performance, scalable, and reliable e-commerce platform that de
 
 <h4>Application Structure</h4>
 <pre>
-/cp-cogort6-group2ce6-capstone-grp1
+/cp-cohort10-group5-capstone-grp5
 |-- .github/workflows
     |-- deploy_dev.yaml
     |-- deploy_prod.yaml
