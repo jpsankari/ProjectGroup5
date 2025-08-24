@@ -8,12 +8,6 @@ on:
     paths:
       - 'envs/prod/**'
 
-#on: workflow_dispatch
-# on:
-#   push:
-#     branches:
-#       - main
-
 permissions:
   id-token: write      # <- This is required for OIDC
   contents: read
