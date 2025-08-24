@@ -2,18 +2,12 @@ name: Full PROD deployment
 
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
-#on:
- # pull_request:
-  #  branches: [ "main" ]
-   # paths:
-    #  - 'envs/prod/**'
+on:
+  pull_request:
+  branches: [ "main" ]
+  paths:
+   - 'envs/prod/**'
 
-on: 
-  workflow_dispatch:
-#on:
-  push:
-    branches:
-    - main
 
 jobs:
   CI:
