@@ -1,11 +1,13 @@
 # CapstoneProject-DevOps-CICDpipeline Group 5
 
 ## Team Member:
-1. Vincent
-2. Siva Sankari
-3. Christine
-4. JohnBosco
-5. Sandhya Karanam
+
+1. Christine
+2. JohnBosco
+3. Sandhya Karanam
+4. Sivasankari
+5. Vincent 
+
 </ul>
 <p>Students of PaCE@NTU enrolled in the SCTP Cloud Infrastructure Engineering course.</p>
 
