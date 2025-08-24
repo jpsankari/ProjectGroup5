@@ -12,8 +12,8 @@ on:
  # push:
   #  branches:
    #   - main
-    paths:
-      - 'envs/dev/**'
+   # paths:
+    #  - 'envs/dev/**'
 
 jobs:
   CI:
