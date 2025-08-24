@@ -95,8 +95,8 @@ resource "aws_lambda_function" "send_email" {
 
   environment {
     variables = {
-      EMAIL_SENDER    = "xin_wang_xin@hotmail.com" # Replace with a verified SES email
-      EMAIL_RECIPIENT = "xin_wang_xin@hotmail.com"            # The email recipient
+      EMAIL_SENDER    = "jpsankari@hotmail.com" # Replace with a verified SES email
+      EMAIL_RECIPIENT = "jpsankari@hotmail.com"            # The email recipient
     }
   }
 }
