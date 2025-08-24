@@ -18,6 +18,10 @@ on:
       - 'envs/dev/**'
 #
 
+permissions:
+  id-token: write      # <- This is required for OIDC
+  contents: read
+
 jobs:
   CI:
     runs-on: ubuntu-latest
