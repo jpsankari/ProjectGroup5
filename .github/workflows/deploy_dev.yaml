@@ -9,12 +9,13 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
     #paths:
      # - 'envs/dev/**'
 #
-on: workflow_dispatch
-push: 
-  branches:
-    - main
-  paths:
-    - 'envs/dev/**'
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'envs/dev/**'
 #
 
 jobs:
