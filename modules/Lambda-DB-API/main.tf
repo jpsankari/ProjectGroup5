@@ -1,8 +1,8 @@
 #=========================================
 # DynamoDB Table
 #=========================================
-resource "aws_dynamodb_table" "fruit_orders" {
-  name         = "fruit_orders_${var.env}"
+resource "aws_dynamodb_table" "OneClickBouquet_orders" {
+  name         = "OneClickBouquet_orders_${var.env}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "order_id"
 
