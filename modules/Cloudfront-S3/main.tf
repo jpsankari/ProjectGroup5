@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "origin-${aws_s3_bucket.static_site.id}"
   }
 
-  aliases             = "oneclickbouquet".aliases
+  aliases             = var.aliases
   web_acl_id          = var.web_acl_id
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
