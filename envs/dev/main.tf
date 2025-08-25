@@ -1,6 +1,6 @@
 locals {
   env           = "dev"
-  domain_prefix = "myfruitshop"
+  domain_prefix = "OneClickBouquet"
   zone_name     = "sctp-sandbox.com"
 }
 
