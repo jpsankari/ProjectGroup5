@@ -121,7 +121,7 @@ resource "aws_lambda_function" "process_order" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE   = aws_dynamodb_table.fruit_orders.name
+      DYNAMODB_TABLE   = aws_dynamodb_table.OneClickBouquet_orders.name
       EMAIL_LAMBDA_ARN = aws_lambda_function.send_email.arn # Add the email Lambda ARN
     }
   }
@@ -131,7 +131,7 @@ resource "aws_lambda_function" "process_order" {
 # API Gateway for Lambda
 #=========================================
 resource "aws_api_gateway_rest_api" "api" {
-  name        = "FruitShopAPI_${var.env}"
+  name        = "OneClickBouquetAPI_${var.env}"
   description = "API for processing fruit shop orders"
 }
 
