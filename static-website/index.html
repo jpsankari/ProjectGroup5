@@ -19,7 +19,7 @@
             background-color: rgba(255, 255, 255, 0.7); /* White background with 70% opacity */
             padding: 10px;
             border-radius: 5px; /* Optional: Add rounded corners */
-            color: #c0e076;
+            color: hsl(78, 93%, 46%);
         }
         .product {
             margin: 20px 0;
@@ -49,13 +49,18 @@
         button:hover {
             background-color: #d62839;
         }
+
+        .center-table {
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
 
     <h1 style="background: transparent;">Quick click . . . . . . . . . . . . . . . . .,  <br> . . . . . . . . beautiful bouquets.</h1>
     <div class="product">
-        <table>
+        <table class="center-table">
             <tr><td><img src="images/1.jpeg" style="max-width: 100px; max-height: 100px;" alt="Style 1"></td><td><img src="images/2.jpeg" style="max-width: 100px; max-height: 100px;" alt="Style 2">></td><td><img src="images/3.jpeg" style="max-width: 100px; max-height: 100px;" alt="Style 3">></td></tr>
             <tr><td>Style 1</td><td>Style 2</td><td>Style 3</td></tr>
         </table>
@@ -67,6 +72,7 @@
     <div class="order-form">
         <input type="email" id="email" placeholder="Enter your email" required>
         <input type="number" id="quantity" placeholder="Enter quantity" required min="1">
+        <input type="Style Number" id="style" placeholder="Enter Style Number" required min="1">
         <button id="orderButton">Order Now</button>
     </div>
 
