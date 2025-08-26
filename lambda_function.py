@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         payload = json.loads(json_payload)
         
         # Validate required fields
-        required_fields = ['order_id', 'fruit', 'quantity']
+        required_fields = ['order_id', 'bouquet', 'style', 'quantity']
         for field in required_fields:
             if field not in payload:
                 return {
@@ -31,7 +31,7 @@ def lambda_handler(event, context):
         
         # Extract order details
         order_id = payload.get('order_id')
-        fruit = payload.get('fruit')
+        bouquet = payload.get('bouquet')
         quantity = payload.get('quantity')
         
         # Ensure order_id is not None
@@ -44,8 +44,9 @@ def lambda_handler(event, context):
         # Define the item to be stored in DynamoDB
         item = {
             'order_id': {'S': order_id},
-            'fruit': {'S': fruit},
+            'bouquet': {'S': bouquet},
             'quantity': {'N': str(quantity)}
+            'style': {'N': str(style)}
         }
 
         # Put the item in the DynamoDB table
