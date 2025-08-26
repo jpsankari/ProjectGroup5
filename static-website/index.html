@@ -94,7 +94,7 @@
             const quantity = Number(document.getElementById('quantity').value); // Convert quantity to a number
             const order_id = generateOrderId(); // Auto-generate order_id
             const bouquet = "bouquet"; // Hardcoded fruit
-            const style = document.getElementById('style').value; // Get style input
+        //    const style = document.getElementById('style').value; // Get style input
 
             if (!email || !quantity || quantity <= 0) {
                 alert('Please enter a valid email and quantity.');
@@ -115,7 +115,7 @@
                     bouquet: bouquet,        // Matches fruit from curl example
                     quantity: quantity,  // Matches quantity from curl example
                     email: email,         // This is extra from the form input
-                    style: style         // This is extra from the form input
+                 //   style: style         // This is extra from the form input
                 })
             })
             .then(response => {
