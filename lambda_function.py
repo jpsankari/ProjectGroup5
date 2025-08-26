@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         payload = json.loads(json_payload)
         
         # Validate required fields
-        required_fields = ['order_id', 'bouquet', 'style', 'quantity']
+        required_fields = ['order_id', 'bouquet', 'quantity', 'style']
         for field in required_fields:
             if field not in payload:
                 return {
@@ -33,6 +33,7 @@ def lambda_handler(event, context):
         order_id = payload.get('order_id')
         bouquet = payload.get('bouquet')
         quantity = payload.get('quantity')
+        style = payload.get('style')
         
         # Ensure order_id is not None
         if order_id is None:
@@ -75,6 +76,3 @@ def lambda_handler(event, context):
         }
 
 
-# curl -X POST https://2ji0y7x3j7.execute-api.us-east-1.amazonaws.com/prod/orders \
-#      -H "Content-Type: application/json" \
-#      -d '{"order_id": "123", "fruit": "apple", "quantity": 11}'
