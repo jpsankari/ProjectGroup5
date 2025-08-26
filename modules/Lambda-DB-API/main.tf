@@ -132,7 +132,7 @@ resource "aws_lambda_function" "process_order" {
 #=========================================
 resource "aws_api_gateway_rest_api" "api" {
   name        = "OneClickBouquetAPI_${var.env}"
-  description = "API for processing fruit shop orders"
+  description = "API for processing bouquet orders"
 }
 
 resource "aws_api_gateway_resource" "orders_resource" {
