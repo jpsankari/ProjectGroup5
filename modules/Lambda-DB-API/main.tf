@@ -8,9 +8,8 @@ resource "aws_dynamodb_table" "OneClickBouquet_orders" {
 
   attribute {
     name = "order_id"
-    type = "S"    
+    type = "S"
   }
-
 }
 
 #========================================
@@ -133,7 +132,7 @@ resource "aws_lambda_function" "process_order" {
 #=========================================
 resource "aws_api_gateway_rest_api" "api" {
   name        = "OneClickBouquetAPI_${var.env}"
-  description = "API for processing bouquet orders"
+  description = "API for processing fruit shop orders"
 }
 
 resource "aws_api_gateway_resource" "orders_resource" {
@@ -241,15 +240,36 @@ resource "aws_api_gateway_method_response" "options_method_response" {
   }
 }
 
+
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.api.id
+
+  triggers = {
+    redeploy = timestamp()  # Forces a new deployment each time you run Terraform
+  }
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
+  stage_name    = var.env
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.api_deployment.id
-  stage_name    = var.env
+
+  variables = {
+    lambdaAlias = var.env
+  }
+
+  xray_tracing_enabled = true
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
+    format          = jsonencode({
+      requestId       = "$context.requestId"
+      status          = "$context.status"
+      integrationError = "$context.integration.error"
+      latency         = "$context.requestTime"
+    })
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {
