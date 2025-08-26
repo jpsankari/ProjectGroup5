@@ -258,18 +258,7 @@ resource "aws_api_gateway_stage" "api_stage" {
   variables = {
     lambdaAlias = var.env
   }
-
-  xray_tracing_enabled = true
-
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
-    format          = jsonencode({
-      requestId       = "$context.requestId"
-      status          = "$context.status"
-      integrationError = "$context.integration.error"
-      latency         = "$context.requestTime"
-    })
-  }
+  
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {
