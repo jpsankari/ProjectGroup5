@@ -6,8 +6,8 @@ ses = boto3.client('ses')
 def lambda_handler(event, context):
     sender = os.environ['EMAIL_SENDER']
     recipient = os.environ['EMAIL_RECIPIENT']
-    subject = "New Fruit Order"
-    body_text = "You have a new fruit order!"
+    subject = "New bouquet Order"
+    body_text = "You have a new bouquet  order!"
     
     response = ses.send_email(
         Source=sender,
