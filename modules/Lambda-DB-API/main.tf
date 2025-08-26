@@ -8,8 +8,19 @@ resource "aws_dynamodb_table" "OneClickBouquet_orders" {
 
   attribute {
     name = "order_id"
-    type = "S"
+    type = "S"    
   }
+
+ attribute {
+    name = "quantity"
+    type = "N"    
+  }
+
+ attribute {
+    name = "style"
+    type = "N"    
+  }
+
 }
 
 #========================================
