@@ -5,7 +5,7 @@
 1. Christine
 2. JohnBosco
 3. Sandhya Karanam
-4. Sivasankari (Team Lead)
+4. Sivasankari
 5. Vincent 
 
 </ul>
