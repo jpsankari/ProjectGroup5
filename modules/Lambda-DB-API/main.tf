@@ -244,7 +244,12 @@ resource "aws_api_gateway_method_response" "options_method_response" {
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.api.id
-  stage_name  = "${var.env}"
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
+  stage_name    = var.env
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {

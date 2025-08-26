@@ -46,7 +46,7 @@ def lambda_handler(event, context):
         item = {
             'order_id': {'S': order_id},
             'bouquet': {'S': bouquet},
-            'quantity': {'N': str(quantity)}
+            'quantity': {'N': str(quantity)},
             'style': {'N': str(style)}
         }
 
