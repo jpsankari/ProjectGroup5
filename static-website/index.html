@@ -36,7 +36,7 @@
         .order-form {
             margin-top: 20px;
         }
-        input[type="email"], input[type="number"], input[type="Style"] {
+        input[type="email"], input[type="number"], input[type="style"] {
             padding: 10px;
             width: 250px;
             margin-right: 10px;
@@ -93,7 +93,8 @@
             const email = document.getElementById('email').value;
             const quantity = Number(document.getElementById('quantity').value); // Convert quantity to a number
             const order_id = generateOrderId(); // Auto-generate order_id
-            const fruit = "strawberry"; // Hardcoded fruit
+            const bouquet = "bouquet"; // Hardcoded fruit
+            const style = document.getElementById('style').value; // Get style input
 
             if (!email || !quantity || quantity <= 0) {
                 alert('Please enter a valid email and quantity.');
@@ -111,9 +112,10 @@
                 },
                 body: JSON.stringify({ 
                     order_id: order_id, // Matches order_id from curl example
-                    fruit: fruit,        // Matches fruit from curl example
+                    bouquet: bouquet,        // Matches fruit from curl example
                     quantity: quantity,  // Matches quantity from curl example
-                    email: email         // This is extra from the form input
+                    email: email,         // This is extra from the form input
+                    style: style         // This is extra from the form input
                 })
             })
             .then(response => {
