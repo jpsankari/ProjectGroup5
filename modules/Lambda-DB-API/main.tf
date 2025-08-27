@@ -83,6 +83,7 @@ resource "aws_iam_role_policy_attachment" "lambda_exec_role_ses" {
   policy_arn = aws_iam_policy.lambda_ses_policy.arn
 }
 
+/*
 # Lambda Function to send email notifications
 resource "aws_lambda_function" "send_email" {
   function_name = "send_email_notification_${var.env}"
@@ -100,6 +101,7 @@ resource "aws_lambda_function" "send_email" {
     }
   }
 }
+*/
 
 #========================================
 # Lambda Function for processing orders
@@ -122,7 +124,7 @@ resource "aws_lambda_function" "process_order" {
   environment {
     variables = {
       DYNAMODB_TABLE   = aws_dynamodb_table.OneClickBouquet_orders.name
-      EMAIL_LAMBDA_ARN = aws_lambda_function.send_email.arn # Add the email Lambda ARN
+     // EMAIL_LAMBDA_ARN = aws_lambda_function.send_email.arn # Add the email Lambda ARN
     }
   }
 }
