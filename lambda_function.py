@@ -47,7 +47,7 @@ def lambda_handler(event, context):
             'order_id': {'S': order_id},
             'bouquet': {'S': bouquet},
             'quantity': {'N': str(quantity)},
-            #'style': {'N': str(style)}
+            'style': {'N': str(style)}
         }
 
         # Put the item in the DynamoDB table
