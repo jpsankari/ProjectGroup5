@@ -21,5 +21,5 @@ variable "web_acl_id" {
 variable "acm_certificate_arn" {
   description = "ACM certificate ARN (must be in us-east-1)"
   type        = string
-  default = "arn:aws:acm:ap-southeast-1:255945442255:certificate/27f18dde-d8bd-42b3-a8f1-8c3a690052ef"
+  default = "arn:aws:acm:us-east-1:255945442255:certificate/56f8abea-c814-463b-84dc-f82255101f4b"
 }
