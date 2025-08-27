@@ -43,7 +43,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   #aliases             = var.aliases
-  aliases             =  "oneclickBouquet.sctp-sandbox.com"
+  aliases             = ["oneclickbouquet.sctp-sandbox.com"]
   web_acl_id          = var.web_acl_id
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
