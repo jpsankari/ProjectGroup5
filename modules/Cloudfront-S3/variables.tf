@@ -17,3 +17,9 @@ variable "web_acl_id" {
   type        = string
   default     = "" # Leave empty if not using AWS WAF.
 }
+
+variable "acm_certificate_arn" {
+  description = "ACM certificate ARN (must be in us-east-1)"
+  type        = string
+  default = "_b012566c4c7d4701887d36653e95e9c9.xlfgrmvvlj.acm-validations.aws"
+}
