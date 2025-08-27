@@ -96,7 +96,7 @@
             const bouquet = "bouquet"; // Hardcoded bouquet
             const style = Number(document.getElementById('style').value); // Convert quantity to a number
 
-            if (!email || !quantity ||!style|| quantity <= 0 ||style <= 0) {
+            if (!email || !quantity || !style || quantity <= 0 || style <= 0) {
                 alert('Please enter a valid email and quantity.');
                 return;
             }
@@ -115,7 +115,7 @@
                     bouquet: bouquet,        // Matches bouquet from curl example
                     quantity: quantity,  // Matches quantity from curl example
                     email: email,         // This is extra from the form input
-                    //style: style         // This is extra from the form input
+                    style: style         // This is extra from the form input
                 })
             })
             .then(response => {
