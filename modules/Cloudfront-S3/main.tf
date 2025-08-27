@@ -42,7 +42,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "origin-${aws_s3_bucket.static_site.id}"
   }
 
-  aliases             = var.aliases
+  #aliases             = var.aliases
+  aliases             =  "oneclickBouquet.sctp-sandbox.com"
   web_acl_id          = var.web_acl_id
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
@@ -79,5 +80,3 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
-
-
