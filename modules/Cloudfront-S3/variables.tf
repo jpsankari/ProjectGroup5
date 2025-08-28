@@ -23,3 +23,7 @@ variable "acm_certificate_arn" {
   type        = string
   default = "arn:aws:acm:us-east-1:255945442255:certificate/56f8abea-c814-463b-84dc-f82255101f4b"
 }
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
+}
