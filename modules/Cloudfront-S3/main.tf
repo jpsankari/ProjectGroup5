@@ -90,7 +90,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 #================================================
 resource "aws_wafv2_web_acl" "cloudfront_waf" {
   provider    = aws.virginia
-  name        = "oneclickbouquet-cloudfront-waf"
+  name        = "cloudfront-waf"
   scope       = "CLOUDFRONT"
   description = "WAF for CloudFront distribution"
 
