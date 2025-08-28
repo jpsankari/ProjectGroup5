@@ -250,6 +250,9 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   triggers = {
     redeploy = timestamp()  # Forces a new deployment each time you run Terraform
   }
+lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
