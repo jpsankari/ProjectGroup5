@@ -72,6 +72,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       locations        = []
     }
   }
+#Call WAF
+ web_acl_id = aws_wafv2_web_acl.cloudfront_waf.arn
 }
 
 #==================================================
@@ -83,3 +85,24 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
+
+#==================================================
+# WAF for CloudFront
+#================================================
+resource "aws_wafv2_web_acl" "cloudfront_waf" {
+  provider    = aws.virginia
+  name        = "cloudfront-waf"
+  scope       = "CLOUDFRONT"
+  description = "WAF for CloudFront distribution"
+
+  default_action {
+    allow {}
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "cloudfrontWAF"
+    sampled_requests_enabled   = true
+  }
+
+ }
