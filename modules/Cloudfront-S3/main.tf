@@ -43,10 +43,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   aliases             = var.aliases
-  #aliases             = ["oneclickbouquet.sctp-sandbox.com"]
-  #web_acl_id          = var.web_acl_id
-  web_acl_id = null
-  #web_acl_id = aws_wafv2_web_acl.cloudfront_waf.arn
+  depends_on = [aws_wafv2_web_acl.cloudfront_waf]
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
   default_root_object = "index.html"
