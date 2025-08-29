@@ -223,12 +223,21 @@ resource "aws_api_gateway_method_response" "options_method_response" {
 
 
 resource "aws_api_gateway_deployment" "api_deployment" {
-  depends_on  = [aws_api_gateway_integration.lambda_integration]
+  #depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.api.id
 
-  triggers = {
-    redeploy = timestamp()  # Forces a new deployment each time you run Terraform
-  }
+  #triggers = {
+   # redeploy = timestamp()  # Forces a new deployment each time you run Terraform
+  #}
+  depends_on = [
+    aws_api_gateway_integration.lambda_integration,
+    aws_api_gateway_integration_response.post_integration_response,
+    aws_api_gateway_method_response.post_method_response,
+    aws_api_gateway_integration.options_integration,
+    aws_api_gateway_integration_response.options_integration_response,
+    aws_api_gateway_method_response.options_method_response
+  ]
+
 lifecycle {
     create_before_destroy = true
   }
