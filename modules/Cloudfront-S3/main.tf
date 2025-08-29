@@ -103,5 +103,12 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
     metric_name                = "cloudfrontWAF"
     sampled_requests_enabled   = true
   }
-
  }
+
+#==================================================
+# Cloud Watch
+#================================================
+resource "aws_cloudwatch_log_group" "central_log_group" {
+  name              = "/oneclickbouq/combined-logs"
+  retention_in_days = 1
+}
