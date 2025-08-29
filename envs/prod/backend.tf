@@ -3,5 +3,6 @@ terraform {
     bucket = "sctp-ce10-tfstate"
     key    = "ce10-group5-project.tfstate"
     region = "ap-southeast-1"
+    encrypt        = true
   }
 }
