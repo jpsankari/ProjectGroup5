@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - 'envs/dev/**'
+    workflow_dispatch:
 
 #on: 
  # workflow_dispatch:
