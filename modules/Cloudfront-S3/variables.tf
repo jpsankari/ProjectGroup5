@@ -27,3 +27,10 @@ provider "aws" {
   alias  = "virginia"
   region = "us-east-1"
 }
+
+# Declare the `waf_logs` variable
+variable "waf_logs" {
+  description = "The ID of the Web ACL associated with CloudFront (optional)."
+  type        = string
+  default     = "" # Leave empty if not using AWS Cloudwtch.
+}
