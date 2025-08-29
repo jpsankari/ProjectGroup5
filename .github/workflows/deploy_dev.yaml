@@ -1,21 +1,21 @@
 name: Full DEV Deployment
 
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-#
-#on:
- # push: 
-  #  branches:
-   #   - main
-    #paths:
-     # - 'envs/dev/**'
-#
-on: 
-  workflow_dispatch:
-  push:
+
+on:
+  push: 
     branches:
       - main
     paths:
       - 'envs/dev/**'
+
+#on: 
+ # workflow_dispatch:
+  #push:
+   # branches:
+    #  - main
+    #paths:
+     # - 'envs/dev/**'
 #
 
 permissions:
