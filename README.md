@@ -2,7 +2,7 @@
 
 ## Team Member:
 
-1. Christine
+1. Cathrina
 2. JohnBosco
 3. Sandhya Karanam
 4. Sivasankari
