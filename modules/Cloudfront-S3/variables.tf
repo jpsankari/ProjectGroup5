@@ -8,7 +8,7 @@ variable "env" {
 variable "aliases" {
   description = "Custom domain aliases for the CloudFront distribution (optional)."
   type        = list(string)
-  default     = [] # No aliases by default, set to your custom domain if needed.
+  default     = ["oneclickbouquet"] # No aliases by default, set to your custom domain if needed.
 }
 
 # Declare the `web_acl_id` variable
