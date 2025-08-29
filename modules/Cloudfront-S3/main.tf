@@ -109,6 +109,20 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 # Cloud Watch
 #================================================
 resource "aws_cloudwatch_log_group" "central_log_group" {
-  name              = "/oneclickbouq/combined-logs"
+  provider    = aws.virginia
+  name              = "/aws/oneclickbouquet/combined-logs"
   retention_in_days = 1
+}
+
+resource "aws_wafv2_logging_configuration" "waf_logs" {
+  log_destination_configs = [aws_cloudwatch_log_group.waf_log_group.arn]
+  resource_arn            = aws_wafv2_web_acl.cloudfront_waf. # Replace with your actual WAF WebACL ARN
+
+  redacted_fields {
+    single_header {
+      name = "authorization"
+    }
+  }
+
+  depends_on = [aws_cloudwatch_log_group.waf_log_group]
 }
