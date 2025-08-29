@@ -83,26 +83,6 @@ resource "aws_iam_role_policy_attachment" "lambda_exec_role_ses" {
   policy_arn = aws_iam_policy.lambda_ses_policy.arn
 }
 
-/*
-# Lambda Function to send email notifications
-resource "aws_lambda_function" "send_email" {
-  function_name = "send_email_notification_${var.env}"
-  handler       = "email_lambda.lambda_handler"
-  runtime       = "python3.8"
-
-  filename = "../../send_email.zip" # Prepackaged Lambda code for sending email
-  role     = aws_iam_role.lambda_exec_role.arn
-  timeout  = 10
-
-  environment {
-    variables = {
-      EMAIL_SENDER    = "jpsankari@hotmail.com" # Replace with a verified SES email
-      EMAIL_RECIPIENT = "jpsankari@hotmail.com"            # The email recipient
-    }
-  }
-}
-*/
-
 #========================================
 # Lambda Function for processing orders
 #========================================
@@ -124,7 +104,6 @@ resource "aws_lambda_function" "process_order" {
   environment {
     variables = {
       DYNAMODB_TABLE   = aws_dynamodb_table.OneClickBouquet_orders.name
-     // EMAIL_LAMBDA_ARN = aws_lambda_function.send_email.arn # Add the email Lambda ARN
     }
   }
 }
