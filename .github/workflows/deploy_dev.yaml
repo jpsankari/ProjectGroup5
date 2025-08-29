@@ -2,22 +2,15 @@ name: Full DEV Deployment
 
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
-on:
-  push: 
+
+on: 
+  workflow_dispatch:
+  push:
     branches:
       - main
     paths:
       - 'envs/dev/**'
-    workflow_dispatch:
 
-#on: 
- # workflow_dispatch:
-  #push:
-   # branches:
-    #  - main
-    #paths:
-     # - 'envs/dev/**'
-#
 
 permissions:
   id-token: write      # <- This is required for OIDC
