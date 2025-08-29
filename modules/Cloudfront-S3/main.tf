@@ -103,6 +103,12 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
     metric_name                = "cloudfrontWAF"
     sampled_requests_enabled   = true
   }
+ tags = {
+    Name  = "cloudfront-waf"
+    Alias = "oneclickbouquet-cloudfront-waf-${var.env}"
+    Env   = var.env
+  }
+
  }
 
 #==================================================
