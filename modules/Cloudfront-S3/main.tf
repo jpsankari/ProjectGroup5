@@ -42,8 +42,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "origin-${aws_s3_bucket.static_site.id}"
   }
 
-  #aliases             = var.aliases
-  aliases             = ["oneclickbouquet.sctp-sandbox.com"]
+  aliases             = var.aliases
+  #aliases             = ["oneclickbouquet.sctp-sandbox.com"]
   #web_acl_id          = var.web_acl_id
   web_acl_id = aws_wafv2_web_acl.cloudfront_waf.arn
   enabled             = true
@@ -90,7 +90,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 #================================================
 resource "aws_wafv2_web_acl" "cloudfront_waf" {
   provider    = aws.virginia
-  name        = "oneclickbouquet-cloudfront-waf"
+  name        = "oneclickbouquet-cloudfront-waf-${var.env}"
   scope       = "CLOUDFRONT"
   description = "WAF for CloudFront distribution"
 
