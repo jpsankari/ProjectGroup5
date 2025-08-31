@@ -115,8 +115,11 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
 # Cloud Watch
 #================================================
 resource "aws_cloudwatch_log_group" "central_log_group" {
-  provider    = aws.virginia
+  provider          = aws.virginia
   name              = "/aws/oneclickbouquet/combined-logs"
   retention_in_days = 1
-}
 
+  lifecycle {
+    prevent_destroy = true
+  }
+}
