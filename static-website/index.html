@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             background-image: url('images/bgImage.jpg'); /* Replace with your image URL */
             background-size: cover; /* Cover the entire viewport */
-            background-repeat: repeat; /* Prevent the image from repeating */
+            background-repeat: repeat; 
             background-position: center; /* Center the image */
             color: #333;
             text-align: center;
@@ -93,7 +93,7 @@
             const email = document.getElementById('email').value;
             const quantity = Number(document.getElementById('quantity').value); // Convert quantity to a number
             const order_id = generateOrderId(); // Auto-generate order_id
-            const bouquet = "bouquet"; // Hardcoded bouquet
+            const bouquet = "bouquet";
             const style = Number(document.getElementById('style').value); // Convert quantity to a number
 
             if (!email || !quantity || !style || quantity <= 0 || style <= 0) {
