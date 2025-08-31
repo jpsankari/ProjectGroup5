@@ -20,7 +20,7 @@ variable "web_acl_id" {
 
 variable "acm_certificate_arn" {
   description = "ACM certificate ARN (must be in us-east-1)"
-  type        = string
+  type        = map(string)
   #default = "arn:aws:acm:us-east-1:255945442255:certificate/56f8abea-c814-463b-84dc-f82255101f4b"
   default = {
     dev   = "arn:aws:acm:us-east-1:255945442255:certificate/0cbd44fb-a8b2-4a63-a6ac-c5d962458da9"
