@@ -42,7 +42,13 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "origin-${aws_s3_bucket.static_site.id}"
   }
 
-  aliases             = ["${var.env}-oneclickbouquet.sctp-sandbox.com"]
+  aliases = [
+  var.env == "prod" ?
+  "oneclickbouquet.sctp-prod.com" :
+  "${var.env}-oneclickbouquet.sctp-sandbox.com"
+  
+  ]
+  #aliases             = ["${var.env}-oneclickbouquet.sctp-sandbox.com"]
   #depends_on = [aws_wafv2_web_acl.cloudfront_waf]
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
