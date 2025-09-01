@@ -68,7 +68,13 @@ jobs:
           pip install pytest
 
       - name: Run Integration Tests
-        run: bash scripts/run-integration-tests.sh
+        run: bash scripts/run-integration-tests.sh | tee -a result.log
+
+      - name: Upload test summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: integration-results
+          path: result.log
 
   CD:
     runs-on: ubuntu-latest
@@ -123,3 +129,28 @@ jobs:
       - name: Output CF domain
 
         run: echo "${{ env.CF_DOMAIN }}"
+
+
+  approval:
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@v3
+        with:
+          name: integration-results
+
+      - name: Show test results in log
+        run: cat result.log
+
+      - name: Await Manual Approval
+        uses: peter-evans/manual-approval@v1
+        with:
+          # Optional: assign specific reviewers
+          reviewers: cathyloi,johnboscos,laoniu-meow,sandhyakaranam88 # Optional, specify who can approve
+          instructions: |
+            Integration tests passed. See the logs above for details.
+            Approve to continue with deployment to production.
+          timeout-minutes: 1440
+
+   
