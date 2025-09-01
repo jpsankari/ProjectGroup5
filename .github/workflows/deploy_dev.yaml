@@ -56,16 +56,17 @@ jobs:
         run: terraform plan
         working-directory: './envs/dev'
   
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest
-
   integration-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Run Integration Tests
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+
         run: pytest tests/integration/
       - name: Check CloudFront HTTP 200
         run: bash scripts/run-integration-tests.sh
