@@ -71,7 +71,7 @@ jobs:
         run: bash scripts/run-integration-tests.sh | tee -a result.log
 
       - name: Upload test summary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: integration-results
           path: result.log
@@ -136,7 +136,7 @@ jobs:
     needs: integration-tests
     steps:
       - name: Download test results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: integration-results
 
