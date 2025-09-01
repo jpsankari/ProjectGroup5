@@ -63,7 +63,7 @@ jobs:
       - name: Run Integration Tests
         run: pytest tests/integration/
       - name: Check CloudFront HTTP 200
-        run: ../scripts/run-integration-tests.sh
+        run: bash scripts/run-integration-tests.sh
 
   CD:
     runs-on: ubuntu-latest
