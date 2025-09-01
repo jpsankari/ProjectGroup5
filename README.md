@@ -16,7 +16,7 @@
 <h3>Project Overview</h3>
 <ul>
     <li><strong>Project Name:</strong> CI/CD Pipeline for Web App Deployment on AWS ECS</li>
-    <li><strong>Repository:</strong> GitHub Repository - [https://github.com/sandhyakaranam88/xxxx]</li>
+    <li><strong>Repository:</strong> GitHub Repository - []</li>
 </ul>
 
 <hr>
