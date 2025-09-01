@@ -28,7 +28,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.8.2   # pin this if needed
+        terraform_version: 1.8.2
         terraform_wrapper: false
 
     - name: Terraform Init
@@ -36,22 +36,25 @@ jobs:
       working-directory: './envs/dev'
 
     - name: Select Terraform Workspace
-      run: terraform workspace select dev
+      run: terraform workspace select dev || terraform workspace new dev
       working-directory: './envs/dev'
-
-    - name: Export Terraform Outputs
-      id: tfout
-      shell: bash
-      run: |
-        echo "CF_ID=$(terraform output -raw cf_id)" >> $GITHUB_ENV
-        echo "S3_NAME=$(terraform output -raw bucket_name)" >> $GITHUB_ENV
-        echo "CF_DOMAIN=$(terraform output -raw cf_domain)" >> $GITHUB_ENV
-        echo "API_ENDPOINT=$(terraform output -raw api_endpoint)" >> $GITHUB_ENV
-      working-directory: './envs/dev'
-
-    - name: s3 delete files
-      run: aws s3 rm s3://${{ env.S3_NAME }} --recursive
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve
       working-directory: './envs/dev'
+
+    - name: Export Terraform Outputs (Post-destroy)
+      if: always()  # ensures it runs even if previous step fails
+      shell: bash
+      run: |
+        terraform output -raw cf_id || echo "cf_id not found"
+        terraform output -raw bucket_name || echo "bucket_name not found"
+        terraform output -raw cf_domain || echo "cf_domain not found"
+        terraform output -raw api_endpoint || echo "api_endpoint not found"
+      working-directory: './envs/dev'
+      continue-on-error: true
+
+    - name: s3 delete files
+      if: always()
+      continue-on-error: true
+      run: aws s3 rm s3://${{ env.S3_NAME }} --recursive || echo "S3 bucket not found or already deleted"
