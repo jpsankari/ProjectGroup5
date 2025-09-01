@@ -136,6 +136,7 @@ jobs:
     needs: integration-tests
     permissions:
       issues: write
+    timeout-minutes: 1440
     steps:
       - uses: actions/download-artifact@v4
         with:
