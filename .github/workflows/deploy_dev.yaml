@@ -67,7 +67,6 @@ jobs:
           pip install pytest
 
       - name: Run Integration Tests
-      - name: Check CloudFront HTTP 200
         run: bash scripts/run-integration-tests.sh
 
   CD:
