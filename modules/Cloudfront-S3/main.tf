@@ -44,7 +44,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   aliases = [
   var.env == "prod" ?
-  "oneclickbouquet.sctp-prod.com" :
+  "oneclickbouquet.sctp-sandbox.com" :
   "${var.env}-oneclickbouquet.sctp-sandbox.com"
   
   ]
