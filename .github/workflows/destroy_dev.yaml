@@ -5,7 +5,6 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  CONFIG_DIRECTORY: "./envs/dev"
 
 permissions:
   id-token: write
@@ -31,30 +30,29 @@ jobs:
         terraform_version: 1.8.2
         terraform_wrapper: false
 
+    - name: Show Terraform Files
+      run: ls -la ./envs/dev
+
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -input=false
       working-directory: './envs/dev'
 
-    - name: Select Terraform Workspace
-      run: terraform workspace select dev || terraform workspace new dev
+    - name: Confirm Remote State
+      run: terraform show
       working-directory: './envs/dev'
 
     - name: Terraform Destroy
       run: terraform destroy -auto-approve
       working-directory: './envs/dev'
 
-    - name: Export Terraform Outputs (Post-destroy)
-      if: always()  # ensures it runs even if previous step fails
-      shell: bash
-      run: |
-        terraform output -raw cf_id || echo "cf_id not found"
-        terraform output -raw bucket_name || echo "bucket_name not found"
-        terraform output -raw cf_domain || echo "cf_domain not found"
-        terraform output -raw api_endpoint || echo "api_endpoint not found"
-      working-directory: './envs/dev'
-      continue-on-error: true
-
     - name: s3 delete files
       if: always()
       continue-on-error: true
-      run: aws s3 rm s3://${{ env.S3_NAME }} --recursive || echo "S3 bucket not found or already deleted"
+      run: |
+        BUCKET_NAME=$(terraform output -raw bucket_name || echo "")
+        if [ -n "$BUCKET_NAME" ]; then
+          aws s3 rm s3://$BUCKET_NAME --recursive
+        else
+          echo "Bucket name not found, skipping S3 deletion"
+        fi
+      working-directory: './envs/dev'
