@@ -58,6 +58,7 @@ jobs:
   
   integration-tests:
     runs-on: ubuntu-latest
+    needs: CD
     steps:
       - uses: actions/checkout@v3
 
@@ -71,7 +72,7 @@ jobs:
 
   CD:
     runs-on: ubuntu-latest
-    needs: [CI, integration-tests]
+    needs: CI
     
     steps:
       - name: Checkout
