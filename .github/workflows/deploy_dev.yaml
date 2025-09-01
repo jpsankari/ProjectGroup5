@@ -144,7 +144,7 @@ jobs:
         run: cat result.log
 
       - name: Await Manual Approval
-        uses: peter-evans/manual-approval@v1
+        uses: peter-evans/manual-approval@v3
         with:
           # Optional: assign specific reviewers
           reviewers: cathyloi,johnboscos,laoniu-meow,sandhyakaranam88 # Optional, specify who can approve
