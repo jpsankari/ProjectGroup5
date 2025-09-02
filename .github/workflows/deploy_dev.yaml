@@ -148,7 +148,8 @@ jobs:
         uses: trstringer/manual-approval@v1.9.1
         with:
           secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: jpsankari,laoniu-meow,sandhyakaranam88,johnboscos,cathyloi
+          approvers: jpsankari,laoniu-meow,sandhyakaranam88,cathyloi
+          #johnboscos,
           minimum-approvals: 1
           issue-title: "🚦 Deploy to Production?"
           issue-body: |
