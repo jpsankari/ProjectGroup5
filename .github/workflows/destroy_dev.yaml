@@ -37,7 +37,6 @@ jobs:
       - name: Export Bucket Name (if exists)
         id: bucket
         run: |
-          echo "Attempting to fetch bucket name..."
           terraform output -raw bucket_name > bucket_name.txt || echo "" > bucket_name.txt
           echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
         working-directory: ./envs/dev
@@ -50,7 +49,7 @@ jobs:
         env:
           BUCKET_NAME: ${{ env.BUCKET_NAME }}
 
-      - name: Detach IAM Policies (optional workaround)
+      - name: Detach IAM Policies
         run: |
           ROLE_NAME="lambda_exec_role_dev"
           POLICIES=(
@@ -59,10 +58,18 @@ jobs:
             "arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy"
             "arn:aws:iam::255945442255:policy/lambda_ses_policy_dev"
           )
-          for POLICY in "${POLICIES[@]}"; do
-            echo "Detaching $POLICY from $ROLE_NAME"
-            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || echo "Already detached or not found"
+          for P in "${POLICIES[@]}"; do
+            echo "Detaching $P from $ROLE_NAME"
+            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $P || echo "Already detached"
           done
+
+      - name: API Gateway – Remove Stage or Deployment Workaround
+        run: |
+          # Attempt manual cleanup to ensure API can be destroyed
+          REST_API_ID=$(terraform output -raw api_endpoint | sed -E 's|https://([^/]+)/.*|\1|')
+          echo "Identified REST API ID: $REST_API_ID"
+          aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage 'dev' may already be deleted"
+        working-directory: ./envs/dev
 
       - name: Terraform Destroy
         run: |
