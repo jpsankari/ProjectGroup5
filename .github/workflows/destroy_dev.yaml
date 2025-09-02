@@ -15,44 +15,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::255945442255:role/sankari-github-oidc-deploy-role
-        aws-region: ap-southeast-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::255945442255:role/sankari-github-oidc-deploy-role
+          aws-region: ${{ env.AWS_REGION }}
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.8.2
-        terraform_wrapper: false
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.2
+          terraform_wrapper: false
 
-    - name: Show Terraform Files
-      run: ls -la ./envs/dev
+      - name: Show Terraform Files
+        run: ls -la ./envs/dev
 
-    - name: Terraform Init
-      run: terraform init -input=false
-      working-directory: './envs/dev'
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: './envs/dev'
 
-    - name: Confirm Remote State
-      run: terraform show
-      working-directory: './envs/dev'
+      - name: Export Bucket Name
+        id: bucket
+        run: |
+          terraform output -raw bucket_name > bucket_name.txt || echo ""
+          echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
+        working-directory: './envs/dev'
 
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve
-      working-directory: './envs/dev'
-
-    - name: s3 delete files
-      if: always()
-      continue-on-error: true
-      run: |
-        BUCKET_NAME=$(terraform output -raw bucket_name || echo "")
-        if [ -n "$BUCKET_NAME" ]; then
+      - name: Delete S3 Files (Before Destroy)
+        if: env.BUCKET_NAME != ''
+        run: |
+          echo "Emptying S3 bucket: $BUCKET_NAME"
           aws s3 rm s3://$BUCKET_NAME --recursive
-        else
-          echo "Bucket name not found, skipping S3 deletion"
-        fi
-      working-directory: './envs/dev'
+        env:
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+
+      - name: Terraform Destroy
+        run: |
+          export TF_LOG=INFO
+          export TF_LOG_PATH=terraform_destroy.log
+          terraform destroy -auto-approve
+        working-directory: './envs/dev'
+
+      - name: Upload Terraform Destroy Logs (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-destroy-logs
+          path: ./envs/dev/terraform_destroy.log
