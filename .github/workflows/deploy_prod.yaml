@@ -104,3 +104,23 @@ jobs:
 
       - name: Output CF domain
         run: echo "🚀 Deployed to https://${{ env.CF_DOMAIN }}"
+
+approval:
+    runs-on: ubuntu-latest
+    needs: CI
+    permissions:
+      issues: write
+    timeout-minutes: 1440
+    steps:
+      - name: Manual Approval
+        uses: trstringer/manual-approval@v1.9.1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: laoniu-meow,sandhyakaranam88,cathyloi,johnboscos,jpsankari
+          minimum-approvals: 1
+          issue-title: "🚦 Deploy to Production?"
+          issue-body: |
+            ✅ Integration tests passed.
+            Please review the logs above.
+            Reply with **approve** to continue, or **deny** to stop.
+  
