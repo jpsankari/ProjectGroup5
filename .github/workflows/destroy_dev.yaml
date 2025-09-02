@@ -1,67 +1,95 @@
-name: Destroy AWS Infrastructure
+name: Terraform Destroy DEV
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 env:
   AWS_REGION: ap-southeast-1
-  CF_ID: EVVXZ25IZSNQP  # Replace with actual CloudFront ID
-  LOG_GROUP_NAME: "/aws/lambda/process_order_dev"
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  destroy:
+  Destroy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::255945442255:role/sankari-github-oidc-deploy-role
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq unzip
-
-      - name: Disable CloudFront Distribution
-        id: disable_cf
-        run: |
-          echo "Disabling CloudFront distribution: $CF_ID"
-          CONFIG_JSON=$(aws cloudfront get-distribution-config --id "$CF_ID")
-          ETAG=$(echo "$CONFIG_JSON" | jq -r '.ETag')
-          DIST_CONFIG=$(echo "$CONFIG_JSON" | jq '.DistributionConfig | .Enabled=false')
-          echo "$DIST_CONFIG" > dist-config.json
-
-          aws cloudfront update-distribution \
-            --id "$CF_ID" \
-            --if-match "$ETAG" \
-            --distribution-config file://dist-config.json
-
-      - name: Wait for CloudFront to disable
-        run: |
-          echo "Waiting 60 seconds for CloudFront disable to propagate..."
-          sleep 60
-
-      - name: Delete CloudFront Distribution
-        run: |
-          echo "Deleting CloudFront distribution: $CF_ID"
-          ETAG=$(aws cloudfront get-distribution-config --id "$CF_ID" --query 'ETag' --output text)
-          aws cloudfront delete-distribution --id "$CF_ID" --if-match "$ETAG"
-
-      - name: Manually delete Lambda log group
-        continue-on-error: true
-        run: |
-          echo "Deleting CloudWatch log group: $LOG_GROUP_NAME"
-          aws logs delete-log-group --log-group-name "$LOG_GROUP_NAME" || echo "Log group may not exist or already deleted."
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.8.2
+          terraform_wrapper: false
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -input=false
+        working-directory: ./envs/dev
+
+      - name: Export API & Bucket & Log Group Info
+        id: outputs
+        run: |
+          terraform output -raw api_endpoint > api_url.txt || echo ""
+          terraform output -raw bucket_name > bucket_name.txt || echo ""
+          echo "API_URL=$(cat api_url.txt)" >> $GITHUB_ENV
+          echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
+        working-directory: ./envs/dev
+
+      - name: Empty S3 Bucket (if exists)
+        if: env.BUCKET_NAME != ''
+        run: aws s3 rm s3://$BUCKET_NAME --recursive || echo "Bucket may be empty"
+        env:
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+
+      - name: Detach IAM Policies
+        run: |
+          ROLE_NAME="lambda_exec_role_dev"
+          for POLICY in \
+            arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess \
+            arn:aws:iam::aws:policy/AWSLambda_FullAccess \
+            arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy \
+            arn:aws:iam::255945442255:policy/lambda_ses_policy_dev; do
+            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || true
+          done
+
+      - name: Delete CloudWatch Log Group
+        run: |
+          LOG_GROUP_NAME="/aws/oneclickbouquet/combined-logs"
+          echo "Deleting CloudWatch Log Group: $LOG_GROUP_NAME"
+          aws logs delete-log-group --log-group-name "$LOG_GROUP_NAME" || echo "Log group may not exist or has already been removed."
+
+      - name: API Gateway Cleanup
+        run: |
+          if [ -n "$API_URL" ]; then
+            REST_API_ID=$(echo $API_URL | sed -E 's|https://([^/]+)/.*|\1|')
+            aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage already deleted"
+            aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text | \
+              xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {} || echo "No deployments"
+            aws apigateway delete-rest-api --rest-api-id "$REST_API_ID" || echo "REST API deletion skipped"
+          else
+            echo "API endpoint not found—skipping API cleanup"
+          fi
+        env:
+          API_URL: ${{ env.API_URL }}
 
       - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+        run: |
+          export TF_LOG=TRACE
+          export TF_LOG_PATH=terraform_destroy.log
+          terraform destroy -auto-approve
+        working-directory: ./envs/dev
 
+      - name: Upload Destroy Logs (if failed)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-destroy-logs
+          path: ./envs/dev/terraform_destroy.log
