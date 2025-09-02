@@ -1,6 +1,6 @@
 name: Terraform Destroy DEV
 
-on: 
+on:
   workflow_dispatch
 
 env:
@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::255945442255:role/sankari-github-oidc-deploy-role
@@ -30,36 +30,48 @@ jobs:
           terraform_version: 1.8.2
           terraform_wrapper: false
 
-      - name: Show Terraform Files
-        run: ls -la ./envs/dev
-
       - name: Terraform Init
         run: terraform init -input=false
-        working-directory: './envs/dev'
+        working-directory: ./envs/dev
 
-      - name: Export Bucket Name
+      - name: Export Bucket Name (if exists)
         id: bucket
         run: |
-          terraform output -raw bucket_name > bucket_name.txt || echo ""
+          echo "Attempting to fetch bucket name..."
+          terraform output -raw bucket_name > bucket_name.txt || echo "" > bucket_name.txt
           echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
-        working-directory: './envs/dev'
+        working-directory: ./envs/dev
 
-      - name: Delete S3 Files (Before Destroy)
+      - name: Empty S3 Bucket (if exists)
         if: env.BUCKET_NAME != ''
         run: |
           echo "Emptying S3 bucket: $BUCKET_NAME"
-          aws s3 rm s3://$BUCKET_NAME --recursive
+          aws s3 rm s3://$BUCKET_NAME --recursive || echo "Bucket may already be deleted or empty."
         env:
           BUCKET_NAME: ${{ env.BUCKET_NAME }}
 
+      - name: Detach IAM Policies (optional workaround)
+        run: |
+          ROLE_NAME="lambda_exec_role_dev"
+          POLICIES=(
+            "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+            "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+            "arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy"
+            "arn:aws:iam::255945442255:policy/lambda_ses_policy_dev"
+          )
+          for POLICY in "${POLICIES[@]}"; do
+            echo "Detaching $POLICY from $ROLE_NAME"
+            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || echo "Already detached or not found"
+          done
+
       - name: Terraform Destroy
         run: |
-          export TF_LOG=INFO
+          export TF_LOG=TRACE
           export TF_LOG_PATH=terraform_destroy.log
           terraform destroy -auto-approve
-        working-directory: './envs/dev'
+        working-directory: ./envs/dev
 
-      - name: Upload Terraform Destroy Logs (if failed)
+      - name: Upload Destroy Logs (if failed)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
