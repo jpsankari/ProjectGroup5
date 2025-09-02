@@ -34,42 +34,51 @@ jobs:
         run: terraform init -input=false
         working-directory: ./envs/dev
 
-      - name: Export Bucket Name (if exists)
-        id: bucket
+      - name: Export API & Bucket & Log Group Info
+        id: outputs
         run: |
-          terraform output -raw bucket_name > bucket_name.txt || echo "" > bucket_name.txt
+          terraform output -raw api_endpoint > api_url.txt || echo ""
+          terraform output -raw bucket_name > bucket_name.txt || echo ""
+          echo "API_URL=$(cat api_url.txt)" >> $GITHUB_ENV
           echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
         working-directory: ./envs/dev
 
       - name: Empty S3 Bucket (if exists)
         if: env.BUCKET_NAME != ''
-        run: |
-          echo "Emptying S3 bucket: $BUCKET_NAME"
-          aws s3 rm s3://$BUCKET_NAME --recursive || echo "Bucket may already be deleted or empty."
+        run: aws s3 rm s3://$BUCKET_NAME --recursive || echo "Bucket may be empty"
         env:
           BUCKET_NAME: ${{ env.BUCKET_NAME }}
 
       - name: Detach IAM Policies
         run: |
           ROLE_NAME="lambda_exec_role_dev"
-          POLICIES=(
-            "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
-            "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
-            "arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy"
-            "arn:aws:iam::255945442255:policy/lambda_ses_policy_dev"
-          )
-          for P in "${POLICIES[@]}"; do
-            echo "Detaching $P from $ROLE_NAME"
-            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $P || echo "Already detached"
+          for POLICY in \
+            arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess \
+            arn:aws:iam::aws:policy/AWSLambda_FullAccess \
+            arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy \
+            arn:aws:iam::255945442255:policy/lambda_ses_policy_dev; do
+            aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || true
           done
 
-      - name: API Gateway – Remove Stage or Deployment Workaround
+      - name: Delete CloudWatch Log Group
         run: |
-          # Attempt manual cleanup to ensure API can be destroyed
-          REST_API_ID=$(terraform output -raw api_endpoint | sed -E 's|https://([^/]+)/.*|\1|')
-          echo "Identified REST API ID: $REST_API_ID"
-          aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage 'dev' may already be deleted"
-        working-directory: ./envs/dev
+          LOG_GROUP_NAME="/aws/oneclickbouquet/combined-logs"
+          echo "Deleting CloudWatch Log Group: $LOG_GROUP_NAME"
+          aws logs delete-log-group --log-group-name "$LOG_GROUP_NAME" || echo "Log group may not exist or has already been removed."
+
+      - name: API Gateway Cleanup
+        run: |
+          if [ -n "$API_URL" ]; then
+            REST_API_ID=$(echo $API_URL | sed -E 's|https://([^/]+)/.*|\1|')
+            aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage already deleted"
+            aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text | \
+              xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {} || echo "No deployments"
+            aws apigateway delete-rest-api --rest-api-id "$REST_API_ID" || echo "REST API deletion skipped"
+          else
+            echo "API endpoint not found—skipping API cleanup"
+          fi
+        env:
+          API_URL: ${{ env.API_URL }}
 
       - name: Terraform Destroy
         run: |
