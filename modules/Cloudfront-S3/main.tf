@@ -48,8 +48,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   "${var.env}-oneclickbouquet.sctp-sandbox.com"
   
   ]
-  #aliases             = ["${var.env}-oneclickbouquet.sctp-sandbox.com"]
-  #depends_on = [aws_wafv2_web_acl.cloudfront_waf]
   enabled             = true
   comment             = "Static Website using S3 and Cloudfront OAC in ${var.env} environment"
   default_root_object = "index.html"
@@ -64,7 +62,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-   #acm_certificate_arn            = var.acm_certificate_arn  # Valid ACM cert ARN in us-east-1
   acm_certificate_arn            = var.acm_certificate_arn[var.env]
   ssl_support_method             = "sni-only"
   minimum_protocol_version       = "TLSv1.2_2021"
@@ -89,34 +86,6 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
-/*
-#==================================================
-# WAF for CloudFront
-#================================================
-resource "aws_wafv2_web_acl" "cloudfront_waf" {
-  provider    = aws.virginia
-  #name        = "oneclickbouquet-cloudfront-waf-${var.env}"
-  name        = "oneclickbouquet-cloudfront-waf"
-  scope       = "CLOUDFRONT"
-  description = "WAF for CloudFront distribution"
-  default_action {
-    allow {}
-  }
-
-  visibility_config {
-    cloudwatch_metrics_enabled = true
-    metric_name                = "cloudfrontWAF"
-    sampled_requests_enabled   = true
-  }
- tags = {
-    Name  = "cloudfront-waf"
-    #Alias = "oneclickbouquet-cloudfront-waf-${var.env}"
-    Alias = "oneclickbouquet-cloudfront-waf"
-    Env   = var.env
-  }
-
- }
-*/
 #==================================================
 # Cloud Watch
 #================================================
