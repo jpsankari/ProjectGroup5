@@ -59,6 +59,8 @@
 |-- static-website
         |-- images
         |-- index.html
+|-- scripts
+        |-- run-intgration-test.sh
 |-- .gitignore
 |-- .teraform.lock.hcl
 |-- lambda_function.py
