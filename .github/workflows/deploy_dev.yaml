@@ -150,7 +150,7 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: laoniu-meow,sandhyakaranam88,cathyloi,johnboscos,jpsankari
           minimum-approvals: 1
-          issue-title: "🚦 Please test dev-URL and and approve for production deployment."
+          issue-title: "🚦 Please approve to deploy UAT environment before production."
           issue-body: |
             ✅ Integration tests passed.
 
