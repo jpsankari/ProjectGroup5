@@ -1,7 +1,11 @@
 name: Terraform Destroy DEV
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'DESTROY' to confirm Terraform destroy"
+        required: true
 
 env:
   AWS_REGION: ap-southeast-1
@@ -15,6 +19,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Confirm Destroy
+        if: ${{ github.event.inputs.confirm != 'DESTROY' }}
+        run: |
+          echo "❌ Confirmation failed. Type 'DESTROY' to proceed."
+          exit 1
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -34,20 +44,18 @@ jobs:
         run: terraform init -input=false
         working-directory: ./envs/dev
 
-      - name: Export API & Bucket & Log Group Info
-        id: outputs
+      - name: Export API & Bucket Info
+        id: tf_outputs
         run: |
-          terraform output -raw api_endpoint > api_url.txt || echo ""
-          terraform output -raw bucket_name > bucket_name.txt || echo ""
-          echo "API_URL=$(cat api_url.txt)" >> $GITHUB_ENV
-          echo "BUCKET_NAME=$(cat bucket_name.txt)" >> $GITHUB_ENV
+          echo "api_url=$(terraform output -raw api_endpoint || echo '')" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(terraform output -raw bucket_name || echo '')" >> $GITHUB_OUTPUT
         working-directory: ./envs/dev
 
       - name: Empty S3 Bucket (if exists)
-        if: env.BUCKET_NAME != ''
-        run: aws s3 rm s3://$BUCKET_NAME --recursive || echo "Bucket may be empty"
-        env:
-          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+        if: ${{ steps.tf_outputs.outputs.bucket_name != '' }}
+        run: |
+          echo "Emptying S3 Bucket: $BUCKET_NAME"
+          aws s3 rm s3://${{ steps.tf_outputs.outputs.bucket_name }} --recursive || echo "Bucket may be empty"
 
       - name: Detach IAM Policies
         run: |
@@ -60,25 +68,30 @@ jobs:
             aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || true
           done
 
-      - name: Delete CloudWatch Log Group
-        run: |
-          LOG_GROUP_NAME="/aws/oneclickbouquet/combined-logs"
-          echo "Deleting CloudWatch Log Group: $LOG_GROUP_NAME"
-          aws logs delete-log-group --log-group-name "$LOG_GROUP_NAME" || echo "Log group may not exist or has already been removed."
 
       - name: API Gateway Cleanup
         run: |
+          API_URL="${{ steps.tf_outputs.outputs.api_url }}"
           if [ -n "$API_URL" ]; then
             REST_API_ID=$(echo $API_URL | sed -E 's|https://([^/]+)/.*|\1|')
+            echo "Cleaning up API Gateway with REST API ID: $REST_API_ID"
+            
+            # Delete stage
             aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage already deleted"
-            aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text | \
-              xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {} || echo "No deployments"
+            
+            # Delete deployments
+            DEPLOYMENTS=$(aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text)
+            if [ -n "$DEPLOYMENTS" ]; then
+              echo "$DEPLOYMENTS" | xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {}
+            else
+              echo "No deployments found"
+            fi
+            
+            # Delete REST API
             aws apigateway delete-rest-api --rest-api-id "$REST_API_ID" || echo "REST API deletion skipped"
           else
             echo "API endpoint not found—skipping API cleanup"
           fi
-        env:
-          API_URL: ${{ env.API_URL }}
 
       - name: Terraform Destroy
         run: |
@@ -93,3 +106,4 @@ jobs:
         with:
           name: terraform-destroy-logs
           path: ./envs/dev/terraform_destroy.log
+          if-no-files-found: ignore
