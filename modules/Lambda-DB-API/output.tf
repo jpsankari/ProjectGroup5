@@ -3,6 +3,6 @@ output "post_integration_id" {
 }
 
 output "api_endpoint" {
-value = "https://${aws_api_gateway_rest_api.api.id}.execute-api.ap-southeast-1.amazonaws.com/${aws_api_gateway_stage.api_stage.stage_name}"
- 
+#value = "https://${aws_api_gateway_rest_api.api.id}.execute-api.${var.aws_region}.amazonaws.com/${aws_api_gateway_deployment.api_deployment.stage_name}"
+value = "https://${aws_api_gateway_rest_api.api.id}.execute-api.${var.aws_region}.amazonaws.com/${aws_api_gateway_stage.api_stage.stage_name}"
 }

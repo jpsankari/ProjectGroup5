@@ -3,10 +3,12 @@ name: Full PROD Deployment
 run-name: ${{ github.actor }} is deploying to PROD 🚀
 
 on:
-  workflow_run:
-    workflows: ["Full DEV Deployment"]   # Must match the name from dev.yml
-    types:
-      - completed
+  workflow_dispatch:
+#on:
+ # workflow_run:
+  #  workflows: ["Full DEV Deployment"]   # Must match the name from dev.yml
+   # types:
+    #  - completed
 
 permissions:
   id-token: write      # Required for OIDC
