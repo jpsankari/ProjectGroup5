@@ -6,8 +6,9 @@ resource "aws_dynamodb_table" "OneClickBouquet_orders" {
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "order_id"
   point_in_time_recovery {
-    enabled = true
+    enabled = true      
   }
+
   attribute {
     name = "order_id"
     type = "S"
