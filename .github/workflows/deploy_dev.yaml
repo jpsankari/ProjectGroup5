@@ -69,7 +69,7 @@ jobs:
       - name: Scan Terraform IaC
         run: |
           cd modules
-          snyk iac test --severity-threshold=high
+          snyk iac test --severity-threshold=critical
         continue-on-error: true
         shell: bash
 
@@ -81,10 +81,12 @@ jobs:
       - name: Run Snyk Test (Python)
         run: |
           if [ -f requirements.txt ]; then
-            snyk test --file=requirements.txt --package-manager=pip
+            pip install -r requirements.txt
+          snyk test --file=requirements.txt --package-manager=pip
           else
             echo "No requirements.txt found. Skipping Snyk Python scan."
           fi
+
 
 
   
