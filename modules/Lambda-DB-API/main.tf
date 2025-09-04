@@ -108,6 +108,10 @@ resource "aws_lambda_function" "process_order" {
       DYNAMODB_TABLE   = aws_dynamodb_table.OneClickBouquet_orders.name
     }
   }
+  tracing_config {
+    mode = "Active"
+  }
+  
 }
 
 #=========================================
