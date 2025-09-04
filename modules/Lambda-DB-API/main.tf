@@ -5,7 +5,9 @@ resource "aws_dynamodb_table" "OneClickBouquet_orders" {
   name         = "OneClickBouquet_orders_${var.env}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "order_id"
-
+  point_in_time_recovery {
+    enabled = true
+  }
   attribute {
     name = "order_id"
     type = "S"
@@ -244,7 +246,7 @@ resource "aws_api_gateway_stage" "api_stage" {
   stage_name    = var.env
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.api_deployment.id
-
+  xray_tracing_enabled = true
   variables = {
     lambdaAlias = var.env
   }

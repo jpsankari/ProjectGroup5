@@ -58,7 +58,7 @@ def lambda_handler(event, context):
             'body': json.dumps(f"Order {order_id} processed successfully!"),
             'headers': {
                 'Access-Control-Allow-Headers': '*',
-                'Access-Control-Allow-Origin': '*',
+                #'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': '*'
             }  
         }
