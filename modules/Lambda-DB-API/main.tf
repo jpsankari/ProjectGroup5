@@ -127,7 +127,7 @@ resource "aws_api_gateway_method" "orders_post" {
   resource_id   = aws_api_gateway_resource.orders_resource.id
   http_method   = "POST"
   #authorization = "NONE"
-  authorization = "AWS_IAM""
+  authorization = "AWS_IAM"
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
