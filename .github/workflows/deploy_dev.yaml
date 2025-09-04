@@ -68,7 +68,7 @@ jobs:
 
       - name: Scan Terraform IaC
         run: |
-          cd terraform
+          cd modules
           snyk iac test
   
   integration-tests:
@@ -177,6 +177,7 @@ jobs:
 
 
    
+
 
 
 
