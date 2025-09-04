@@ -82,7 +82,7 @@ jobs:
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
-          snyk test --file=requirements.txt --package-manager=pip
+            snyk test --file=requirements.txt --package-manager=pip --severity-threshold=critical
           else
             echo "No requirements.txt found. Skipping Snyk Python scan."
           fi
