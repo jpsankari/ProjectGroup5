@@ -77,8 +77,13 @@ jobs:
           python-version: '3.11' # or your Lambda runtime version
 
       - name: Run Snyk Test (Python)
-        run: snyk test --file=requirements.txt --package-manager=pip
-        if: exists('requirements.txt')
+        run: |
+          if [ -f requirements.txt ]; then
+            snyk test --file=requirements.txt --package-manager=pip
+          else
+            echo "No requirements.txt found. Skipping Snyk Python scan."
+          fi
+
 
   
   integration-tests:
