@@ -126,8 +126,7 @@ resource "aws_api_gateway_method" "orders_post" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.orders_resource.id
   http_method   = "POST"
-  #authorization = "NONE"
-  authorization = "CUSTOM"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
@@ -250,29 +249,4 @@ resource "aws_api_gateway_stage" "api_stage" {
     lambdaAlias = var.env
   }
   
-}
-
-resource "aws_lambda_permission" "api_gateway_permission" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.process_order.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
-}
-
-resource "aws_lambda_function" "auth_lambda" {
-  function_name = "my-auth-lambda"
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  role = aws_iam_role.lambda_exec_role.arn
-  filename      = "auth_lambda.zip"
-}
-
-resource "aws_api_gateway_authorizer" "my_auth" {
-  name                    = "MyLambdaAuthorizer"
-  rest_api_id             = aws_api_gateway_rest_api.api.id
-  authorizer_uri          = "arn:aws:apigateway:ap-southeast-1:lambda:path/2015-03-31/functions/${aws_lambda_function.auth_lambda.arn}/invocations"
-  authorizer_result_ttl_in_seconds = 300
-  identity_source         = "method.request.header.Authorization"
-  type                    = "TOKEN"
 }
