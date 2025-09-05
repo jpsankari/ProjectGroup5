@@ -104,6 +104,7 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 }
 
 
+
 #==================================================
 # WAFv2 for CloudFront
 #================================================
@@ -153,15 +154,52 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
 locals {
   waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : (
     length(aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf) > 0 ?
-    aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn :
+    "${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn}" :
     null
   )
 }
 
+
+#==================================================
+# WAFv2 for Cloudwatch Logs
+#================================================
+
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
-  resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
+  #resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
+  resource_arn = "${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].name}"
 
   log_destination_configs = [
     aws_kinesis_firehose_delivery_stream.waf_logs.arn
   ]
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "waf_logs" {
+  name        = "waf-logs-stream"
+  destination = "s3"
+
+  extended_s3_configuration {
+    role_arn           = aws_iam_role.firehose_role.arn
+    bucket_arn         = aws_s3_bucket.waf_log_bucket.arn
+    buffering_interval = 300
+    buffering_size     = 5
+  }
+}
+
+resource "aws_iam_role" "firehose_role" {
+  name = "firehose_delivery_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "firehose.amazonaws.com"
+      }
+    }]
+  })
+}
+
+resource "aws_s3_bucket" "waf_log_bucket" {
+  bucket = "my-waf-logs-bucket"
 }
