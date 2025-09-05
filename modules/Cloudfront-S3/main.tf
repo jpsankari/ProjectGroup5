@@ -146,9 +146,7 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
       sampled_requests_enabled   = true
     }
   }
-    lifecycle {
-    prevent_destroy = true
-  }
+
 }
 
 
