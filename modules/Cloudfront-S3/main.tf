@@ -166,6 +166,7 @@ locals {
 
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
 count = var.existing_waf_acl_arn == "" ? 1 : 0
+provider = aws.virginia
 resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
   
 
