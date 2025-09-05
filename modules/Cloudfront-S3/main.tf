@@ -98,9 +98,9 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
   name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
   retention_in_days = 1
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  #lifecycle {
+   # prevent_destroy = true
+  #}
 }
 
 #==================================================
