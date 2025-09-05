@@ -76,6 +76,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       locations        = []
     }
   }
+
+  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn
 }
 
 #==================================================
@@ -98,5 +100,46 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 
   lifecycle {
     prevent_destroy = true
+  }
+}
+
+#==================================================
+# CLOUDFRONT
+#================================================
+
+resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
+  name  = "oneclickbouquet_cloudfront-waf"
+  scope = "CLOUDFRONT"
+
+  default_action {
+    allow {}
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "cloudfrontWAF"
+    sampled_requests_enabled   = true
+  }
+
+  rule {
+    name     = "AWS-AWSManagedRulesCommonRuleSet"
+    priority = 1
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    override_action {
+      none {}
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "CommonRuleSet"
+      sampled_requests_enabled   = true
+    }
   }
 }
