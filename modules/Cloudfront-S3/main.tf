@@ -36,6 +36,7 @@ resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
 # CloudFront Distribution
 #=====================================================
 resource "aws_cloudfront_distribution" "s3_distribution" {
+  provider = aws.virginia
   origin {
     domain_name              = aws_s3_bucket.static_site.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
@@ -77,7 +78,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  web_acl_id = local.waf_arn 
+  web_acl_id =  aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn
 }
 
 #==================================================
@@ -110,9 +111,8 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 #================================================
 
 resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
-  count    = var.existing_waf_acl_arn == "" ? 1 : 0
   provider = aws.virginia
-  name  = "oneclickbouquet_cloudfront-waf"
+  name  = "oneclickbouquet_cloudfront-waf-{var.env}"
   scope = "CLOUDFRONT"
 
   default_action {
@@ -151,11 +151,4 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
   }
 }
 
-locals {
-  waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : (
-    length(aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf) > 0 ?
-    aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn :
-    null
-  )
-}
 
