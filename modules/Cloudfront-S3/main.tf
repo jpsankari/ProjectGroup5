@@ -108,6 +108,7 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 #================================================
 
 resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
+  count  = var.existing_waf_acl_arn == "" ? 1 : 0
   provider = aws.virginia
   name  = "oneclickbouquet_cloudfront-waf"
   scope = "CLOUDFRONT"

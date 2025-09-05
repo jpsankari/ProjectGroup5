@@ -37,3 +37,10 @@ variable "waf_logs" {
   type        = string
   default     = "" # Leave empty if not using AWS Cloudwtch.
 }
+
+variable "existing_waf_acl_arn" {
+  description = "ARN of an existing WAF ACL to associate with CloudFront. Leave empty to create a new one."
+  type        = string
+  default     = ""
+}
+
