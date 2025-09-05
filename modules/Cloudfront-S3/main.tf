@@ -170,7 +170,7 @@ resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
   resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
   
   log_destination_configs = [
-    "arn:aws:firehose:us-east-1:255945442255:deliverystream/onceclick-waf-logs-stream"
+    "arn:aws:firehose:us-east-1:255945442255:deliverystream/oneclick-waf-logs-stream"
   ]
 }
 
