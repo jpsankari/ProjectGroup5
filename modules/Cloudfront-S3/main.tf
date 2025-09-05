@@ -201,5 +201,5 @@ resource "aws_iam_role" "firehose_role" {
 }
 
 resource "aws_s3_bucket" "waf_log_bucket" {
-  bucket = "my-waf-logs-bucket"
+  bucket = "oneclickflower-waf-logs-bucket"
 }
