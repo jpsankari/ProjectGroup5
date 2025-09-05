@@ -205,3 +205,22 @@ resource "aws_iam_role" "firehose_role" {
 resource "aws_s3_bucket" "waf_log_bucket" {
   bucket = "oneclickflower-waf-logs-bucket"
 }
+
+resource "aws_kinesis_firehose_delivery_stream_policy" "waf_logging_policy" {
+  delivery_stream_name = aws_kinesis_firehose_delivery_stream.waf_logs.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "AllowWAFLogging"
+        Effect = "Allow"
+        Principal = {
+          Service = "waf.amazonaws.com"
+        }
+        Action = "firehose:PutRecord"
+        Resource = aws_kinesis_firehose_delivery_stream.waf_logs.arn
+      }
+    ]
+  })
+}
