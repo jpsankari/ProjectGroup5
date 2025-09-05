@@ -154,7 +154,7 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
 locals {
   waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : (
     length(aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf) > 0 ?
-    "${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn}" :
+    aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn :
     null
   )
 }
@@ -165,8 +165,8 @@ locals {
 #================================================
 
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
-  #resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
-  resource_arn = "${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].name}"
+  resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
+  
 
   log_destination_configs = [
     aws_kinesis_firehose_delivery_stream.waf_logs.arn
