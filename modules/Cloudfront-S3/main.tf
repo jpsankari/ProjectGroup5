@@ -98,9 +98,9 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
   name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
   retention_in_days = 1
 
-  #lifecycle {
+  lifecycle {
    # prevent_destroy = true
-  #}
+  }
 }
 
 
@@ -151,6 +151,9 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
 }
 
 locals {
-  #waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
-  waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
+  waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : (
+    length(aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf) > 0 ?
+    aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn :
+    null
+  )
 }
