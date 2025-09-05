@@ -165,7 +165,8 @@ locals {
 #================================================
 
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
-  resource_arn = aws_cloudfront_distribution.s3_distribution.arn 
+count = var.existing_waf_acl_arn == "" ? 1 : 0
+resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
   
 
   log_destination_configs = [
