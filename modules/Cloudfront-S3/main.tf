@@ -159,6 +159,9 @@ locals {
 }
 
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
-  log_destination_configs = [aws_kinesis_firehose_delivery_stream.waf_logs.arn]
-  resource_arn            = aws_wafv2_web_acl.waf_logsample.arn
+  resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn
+
+  log_destination_configs = [
+    aws_kinesis_firehose_delivery_stream.waf_logs.arn
+  ]
 }
