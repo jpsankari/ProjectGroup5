@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn 
+  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn 
 }
 
 #==================================================
@@ -95,7 +95,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 #================================================
 resource "aws_cloudwatch_log_group" "central_log_group" {
   provider          = aws.virginia
-  name              = "/aws/oneclickbouquet/combined-logs"
+  name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
   retention_in_days = 1
 
   lifecycle {
@@ -108,7 +108,6 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 #================================================
 
 resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
-  count  = var.existing_waf_acl_arn == "" ? 1 : 0
   provider = aws.virginia
   name  = "oneclickbouquet_cloudfront-waf"
   scope = "CLOUDFRONT"
@@ -144,4 +143,8 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
       sampled_requests_enabled   = true
     }
   }
+    lifecycle {
+    prevent_destroy = true
+  }
 }
+
