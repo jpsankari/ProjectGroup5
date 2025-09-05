@@ -105,7 +105,7 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 
 
 #==================================================
-# CLOUDFRONT
+# WAFv2 for CloudFront
 #================================================
 
 resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
@@ -156,4 +156,9 @@ locals {
     aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn :
     null
   )
+}
+
+resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
+  log_destination_configs = [aws_kinesis_firehose_delivery_stream.waf_logs.arn]
+  resource_arn            = aws_wafv2_web_acl.waf_logsample.arn
 }
