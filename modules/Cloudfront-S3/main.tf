@@ -167,17 +167,16 @@ locals {
 resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
   provider = aws.virginia
   count = var.existing_waf_acl_arn == "" ? 1 : 0
-resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
+  resource_arn = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn
   
-
   log_destination_configs = [
-    aws_kinesis_firehose_delivery_stream.waf_logs.arn
+    "arn:aws:firehose:us-east-1:255945442255:deliverystream/onceclick-waf-logs-stream"
   ]
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "waf_logs" {
   provider = aws.virginia
-  name        = "onceclick-waf-logs-stream"
+  name        = "oneclick-waf-logs-stream"
   destination = "extended_s3"
 
   extended_s3_configuration {
