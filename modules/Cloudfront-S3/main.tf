@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn 
+  web_acl_id = local.waf_arn 
 }
 
 #==================================================
@@ -102,6 +102,7 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
    # prevent_destroy = true
   #}
 }
+
 
 #==================================================
 # CLOUDFRONT
@@ -148,3 +149,6 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
   }
 }
 
+locals {
+  waf_arn = var.existing_waf_acl_arn != "" ? var.existing_waf_acl_arn : aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn
+}
