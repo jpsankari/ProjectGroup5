@@ -77,7 +77,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.arn
+  web_acl_id = aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf[0].arn 
 }
 
 #==================================================
