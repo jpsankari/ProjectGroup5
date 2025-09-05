@@ -174,8 +174,8 @@ resource "aws_wafv2_web_acl_logging_configuration" "waf_logsample" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "waf_logs" {
-  name        = "waf-logs-stream"
-  destination = "s3"
+  name        = "onceclick-waf-logs-stream"
+  destination = "extended_s3"
 
   extended_s3_configuration {
     role_arn           = aws_iam_role.firehose_role.arn
