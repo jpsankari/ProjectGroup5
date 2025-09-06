@@ -70,14 +70,14 @@ jobs:
 
       - name: Terraform Init and Apply in Lambda-DB-API module
         run: |
-          cd "$GITHUB_WORKSPACE/MODULES/Lambda-DB-API"
+          cd /modules/Lambda-DB-API
           terraform init
           terraform apply -auto-approve
 
       - name: Get API URL from Terraform output
         id: get_api_url
         run: |
-            cd $GITHUB_WORKSPACE/modules/Lambda-DB-API
+            cd modules/Lambda-DB-API
             API_URL=$(terraform output -raw api_invoke_url || echo "")
             if [ -n "$API_URL" ]; then
               echo "API_URL=$API_URL" >> $GITHUB_ENV
