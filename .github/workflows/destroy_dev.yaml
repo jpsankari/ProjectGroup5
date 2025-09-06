@@ -72,7 +72,7 @@ jobs:
         id: get_api_url
         run: |
             API_URL=$(terraform output -raw api_invoke_url || echo "")
-            cd ../MODULES/Lambda-DB-API
+            cd $GITHUB_WORKSPACE/modules/Lambda-DB-API
             if [ -n "$API_URL" ]; then
               echo "API_URL=$API_URL" >> $GITHUB_ENV
             else
