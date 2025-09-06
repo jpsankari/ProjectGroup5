@@ -18,3 +18,7 @@ output "s3_distribution_arn" {
   value = aws_cloudfront_distribution.s3_distribution.arn
 }
 
+output "central_log_group_arn" {
+  value = aws_cloudwatch_log_group.central_log_group.arn
+}
+

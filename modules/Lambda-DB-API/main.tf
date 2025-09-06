@@ -1,4 +1,6 @@
-
+module "cloudfront" {
+  source = "../../modules/cloudfront"  
+}
 
 #=========================================
 # DynamoDB Table
@@ -259,7 +261,7 @@ resource "aws_api_gateway_stage" "api_stage" {
   }
   
   access_log_settings {
-    destination_arn = module.aws_cloudwatch_log_group.central_log_group.arn
+    destination_arn = module.cloudfront.central_log_group.arn
     format          = jsonencode({
       requestId       = "$context.requestId",
       ip              = "$context.identity.sourceIp",

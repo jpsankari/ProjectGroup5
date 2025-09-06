@@ -13,3 +13,4 @@ output "bucket_name" {
 output "api_endpoint" {
   value = module.lambda-db-api.api_endpoint
 }
+
