@@ -77,7 +77,7 @@ jobs:
       - name: Get API URL from Terraform output
         id: get_api_url
         run: |
-            cd modules/Lambda-DB-API
+            cd /modules/Lambda-DB-API
             API_URL=$(terraform output -raw api_invoke_url || echo "")
             if [ -n "$API_URL" ]; then
               echo "API_URL=$API_URL" >> $GITHUB_ENV
