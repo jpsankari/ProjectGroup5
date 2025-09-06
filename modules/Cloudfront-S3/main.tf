@@ -121,6 +121,7 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
     sampled_requests_enabled   = true
   }
 
+ # Rule 1: 
   rule {
     name     = "AWS-AWSManagedRulesCommonRuleSet"
     priority = 1
@@ -130,6 +131,7 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
       }
+      
     }
 
     override_action {
@@ -142,7 +144,50 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
       sampled_requests_enabled   = true
     }
   }
+ # Rule 2: Block Malicious IPs
+
+ rule {
+    name     = "BlockMaliciousIPs"
+    priority = 2
+
+    action {
+      block {}
+    }
+
+    statement {
+      ip_set_reference_statement {
+        arn = aws_wafv2_ip_set.malicious_ips.arn
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled   = true
+      cloudwatch_metrics_enabled = true
+      metric_name                = "BlockMaliciousIPs"
+    }
+  }
 
 }
 
+resource "aws_wafv2_ip_set" "malicious_ips" {
+  name               = "malicious-ip-set"
+  description        = "Block known malicious IPs"
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+
+  addresses = [
+    "45.155.205.233/32",
+    "185.220.101.26/32",
+    "103.27.124.82/32",
+    "198.98.50.163/32",
+    "37.120.247.75/32",
+    "89.248.165.186/32",
+    "179.43.159.195/32",
+    "156.146.62.55/32",
+  ]
+
+  tags = {
+    Name = "malicious-ip-set"
+  }
+}
 
