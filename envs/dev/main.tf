@@ -12,7 +12,7 @@ module "cloudfront-s3" {
 
 
 module "lambda-db-api" {
-  source = "../../modules/Lambda-DB-API"
+  source = "../../modules/Lambda-DB-API"  
   env    = local.env
 }
 
