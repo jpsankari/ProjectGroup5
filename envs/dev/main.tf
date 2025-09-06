@@ -15,3 +15,7 @@ module "lambda-db-api" {
   source = "../../modules/Lambda-DB-API"
   env    = local.env
 }
+
+module "cloudfront" {
+  source = "../cloudfront"  
+}
