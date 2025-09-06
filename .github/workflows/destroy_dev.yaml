@@ -71,8 +71,14 @@ jobs:
       - name: Get API URL from Terraform output
         id: get_api_url
         run: |
-          API_URL=$(terraform output -raw api_invoke_url)
-          echo "API_URL=$API_URL" >> $GITHUB_ENV
+            API_URL=$(terraform output -raw api_invoke_url || echo "")
+            cd ../MODULES/Lambda-DB-API
+            if [ -n "$API_URL" ]; then
+              echo "API_URL=$API_URL" >> $GITHUB_ENV
+            else
+              echo "API URL output not found"
+              exit 1
+            fi
 
       - name: Extract REST API ID and Stage from API URL
         id: extract
