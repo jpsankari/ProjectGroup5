@@ -13,3 +13,7 @@ output "bucket_name" {
 output "api_endpoint" {
   value = module.lambda-db-api.api_endpoint
 }
+
+output "bucket_id" {
+  value = module.cloudfront-s3.bucket_id
+}
