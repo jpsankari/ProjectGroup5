@@ -69,9 +69,8 @@ jobs:
           done
 
       - name: Get API URL from Terraform output
-        id: get_api_url
         run: |
-            API_URL=$(terraform output -raw api_invoke_url || echo "")
+            API_URL="https://yix1nuwyfi.execute-api.ap-southeast-1.amazonaws.com/dev""
             if [ -n "$API_URL" ]; then
               echo "API_URL=$API_URL" >> $GITHUB_ENV
             else
