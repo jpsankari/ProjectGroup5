@@ -14,8 +14,7 @@ module "cloudfront-s3" {
 module "lambda-db-api" {
   source = "../../modules/Lambda-DB-API"
   env    = local.env
+  log_group_arn  =  module.cloudfront-s3.central_log_group_arn
+  log_group_name =  module.cloudfront-s3.central_log_group_name
 }
 
-module "cloudfront" {
-  source = "../cloudfront"  
-}
