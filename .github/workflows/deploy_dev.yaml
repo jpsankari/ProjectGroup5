@@ -44,6 +44,11 @@ jobs:
       - name: Terraform fmt
         run: terraform fmt --recursive
         working-directory: './envs/dev'
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.5.7' # or latest stable
     
       - name: Terraform Init
         run: terraform init
