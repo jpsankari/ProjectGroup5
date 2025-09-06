@@ -17,6 +17,6 @@ module "lambda-db-api" {
 }
 
 module "cloudwatch" {
-  source = "../../modules/cloudwatch"  
+  source = " ../../modules/CloudWatch"
   env    = local.env
 }
