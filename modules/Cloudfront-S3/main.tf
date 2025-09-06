@@ -109,7 +109,7 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
 resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
   provider = aws.virginia
   name  = "oneclickbouquet_cloudfront-waf-${var.env}"
-  scope = "us-east-1"
+  scope = "CLOUDFRONT"
 
   default_action {
     allow {}
@@ -173,7 +173,7 @@ resource "aws_wafv2_ip_set" "malicious_ips" {
   provider = aws.virginia
   name               = "malicious-ip-set"
   description        = "Block known malicious IPs"
-  scope              = "us-east-1"
+  scope              = "CLOUDFRONT"
   ip_address_version = "IPV4"
 
   addresses = [
