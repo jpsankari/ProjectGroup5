@@ -1,5 +1,5 @@
 module "cloudfront" {
-  source = "../../modules/cloudfront"  
+  source = "../modules/cloudfront"  
 }
 
 #=========================================
@@ -261,7 +261,7 @@ resource "aws_api_gateway_stage" "api_stage" {
   }
   
   access_log_settings {
-    destination_arn = module.cloudfront.central_log_group.arn
+    destination_arn = module.cloudfront.central_log_group.arn #//call central log group arn from cloudfront module
     format          = jsonencode({
       requestId       = "$context.requestId",
       ip              = "$context.identity.sourceIp",
