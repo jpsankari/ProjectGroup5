@@ -68,30 +68,34 @@ jobs:
             aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || true
           done
 
-
-      - name: API Gateway Cleanup
+      - name: Get API URL from Terraform output
+        id: get_api_url
         run: |
-          API_URL="${{ steps.tf_outputs.outputs.api_url }}"
-          if [ -n "$API_URL" ]; then
-            REST_API_ID=$(echo $API_URL | sed -E 's|https://([^/]+)/.*|\1|')
-            echo "Cleaning up API Gateway with REST API ID: $REST_API_ID"
-            
-            # Delete stage
-            aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name dev || echo "Stage already deleted"
-            
-            # Delete deployments
-            DEPLOYMENTS=$(aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text)
-            if [ -n "$DEPLOYMENTS" ]; then
-              echo "$DEPLOYMENTS" | xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {}
-            else
-              echo "No deployments found"
-            fi
-            
-            # Delete REST API
-            aws apigateway delete-rest-api --rest-api-id "$REST_API_ID" || echo "REST API deletion skipped"
+          API_URL=$(terraform output -raw api_invoke_url)
+          echo "API_URL=$API_URL" >> $GITHUB_ENV
+
+      - name: Extract REST API ID and Stage from API URL
+        id: extract
+        run: |
+          REST_API_ID=$(echo "$API_URL" | sed -E 's|https://([^.]*)\..*|\1|')
+          STAGE_NAME=$(echo "$API_URL" | awk -F/ '{print $NF}')
+          echo "REST_API_ID=$REST_API_ID" >> $GITHUB_ENV
+          echo "STAGE_NAME=$STAGE_NAME" >> $GITHUB_ENV
+
+      - name: Destroy API Gateway
+        run: |
+          echo "Deleting Stage $STAGE_NAME from API $REST_API_ID"
+          aws apigateway delete-stage --rest-api-id "$REST_API_ID" --stage-name "$STAGE_NAME" || echo "Stage not found or already deleted"
+
+          DEPLOYMENTS=$(aws apigateway get-deployments --rest-api-id "$REST_API_ID" --query 'items[].id' --output text)
+          if [ -n "$DEPLOYMENTS" ]; then
+            echo "$DEPLOYMENTS" | xargs -n1 -I{} aws apigateway delete-deployment --rest-api-id "$REST_API_ID" --deployment-id {}
           else
-            echo "API endpoint not found—skipping API cleanup"
+            echo "No deployments found"
           fi
+
+          echo "Deleting REST API $REST_API_ID"
+          aws apigateway delete-rest-api --rest-api-id "$REST_API_ID" || echo "REST API deletion skipped"
 
       - name: Terraform Destroy
         run: |
