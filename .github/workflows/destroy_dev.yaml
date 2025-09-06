@@ -68,6 +68,12 @@ jobs:
             aws iam detach-role-policy --role-name $ROLE_NAME --policy-arn $POLICY || true
           done
 
+      - name: Terraform Init and Apply in Lambda-DB-API module
+        run: |
+          cd "$GITHUB_WORKSPACE/MODULES/Lambda-DB-API"
+          terraform init
+          terraform apply -auto-approve
+
       - name: Get API URL from Terraform output
         id: get_api_url
         run: |
