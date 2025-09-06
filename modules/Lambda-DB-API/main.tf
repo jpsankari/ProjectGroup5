@@ -1,4 +1,25 @@
 #=========================================
+# Call CloudWatch Module
+#=========================================
+module "Lambda-DB_log_group" {
+  source           = "./CloudWatch"
+  name             = "/aws/oneclickbouquet/my-api-logs-${var.env}"
+  retention_in_days = 1
+  log_stream_name    = "myapp-log-stream"
+  metric_filter_name = "ErrorCountFilter"
+  metric_filter_pattern = "{ $.level = \"ERROR\" }"
+  metric_name        = "ErrorCount"
+  metric_namespace   = "MyApp/Metrics"
+  metric_value       = "1"
+  metric_unit        = "Count"
+  tags = {
+    Environment = "${var.env}"
+    Project     = "oneclickbouquet-MyAPI"
+  }
+}
+
+
+#=========================================
 # DynamoDB Table
 #=========================================
 resource "aws_dynamodb_table" "OneClickBouquet_orders" {
