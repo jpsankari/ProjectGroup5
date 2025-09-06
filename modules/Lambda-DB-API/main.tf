@@ -268,16 +268,6 @@ resource "aws_lambda_permission" "api_gateway_permission" {
 }
 
 #==================================================
-# CloudFront Origin Access Control
-#==================================================
-resource "aws_cloudfront_origin_access_control" "oac" {
-  name                              = "${aws_s3_bucket.bucket_id.id}-oac-${var.env}"
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
-}
-
-#==================================================
 # Cloud Watch
 #================================================
 
