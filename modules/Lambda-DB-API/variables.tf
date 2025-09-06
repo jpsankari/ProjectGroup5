@@ -9,3 +9,7 @@ variable "aws_region" {
   default     = "ap-southeast-1"  
 }
 
+variable "static_site_bucket_id" {
+  description = "ID of the static site S3 bucket"
+  type        = string
+}
