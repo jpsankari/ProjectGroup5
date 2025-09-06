@@ -1,3 +1,7 @@
+module "cloudfront" {
+  source   = "../Cloudfront-S3"
+}
+
 #=========================================
 # DynamoDB Table
 #=========================================
@@ -256,7 +260,7 @@ resource "aws_api_gateway_stage" "api_stage" {
     lambdaAlias = var.env
   }
    access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.central_log_group.arn
+    destination_arn = module.cloudfront.central_log_group_arn
     format          = jsonencode({
       requestId = "$context.requestId"
       ip        = "$context.identity.sourceIp"
@@ -268,7 +272,7 @@ resource "aws_api_gateway_stage" "api_stage" {
       status = "$context.status"
       protocol = "$context.protocol"
     })
-  }
+  } 
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {
@@ -277,34 +281,5 @@ resource "aws_lambda_permission" "api_gateway_permission" {
   function_name = aws_lambda_function.process_order.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
-}
-
-#==================================================
-# Cloud Watch
-#================================================
-
-#==================================================
-# Cloud Watch
-#================================================
-resource "aws_cloudwatch_log_group" "central_log_group" {
-  provider          = aws.virginia
-  name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
-  retention_in_days = 1
-}
-/*
-resource "aws_cloudwatch_log_stream" "s3_log_stream" {
-  name           = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}/s3-log-stream"
-  log_group_name = aws_cloudwatch_log_group.central_log_group.name
-}
-*/
-
-resource "aws_cloudwatch_log_stream" "dynamodb_log_stream" {
-  name           = "/aws/oneclickbouquet/dynamodb-log-stream"
-  log_group_name = aws_cloudwatch_log_group.central_log_group.name
-}
-
-resource "aws_cloudwatch_log_stream" "api_gateway_log_stream" {
-  name           = "/aws/oneclickbouquet/api-gateway-log-stream"
-  log_group_name = aws_cloudwatch_log_group.central_log_group.name
 }
 
