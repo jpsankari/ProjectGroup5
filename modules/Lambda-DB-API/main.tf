@@ -1,7 +1,3 @@
-module "cloudfront" {
-  source   = "../Cloudfront-S3"
-}
-
 #=========================================
 # DynamoDB Table
 #=========================================
@@ -258,21 +254,7 @@ resource "aws_api_gateway_stage" "api_stage" {
   xray_tracing_enabled = true
   variables = {
     lambdaAlias = var.env
-  }
-   access_log_settings {
-    destination_arn = module.cloudfront.central_log_group_arn
-    format          = jsonencode({
-      requestId = "$context.requestId"
-      ip        = "$context.identity.sourceIp"
-      caller    = "$context.identity.caller"
-      user      = "$context.identity.user"
-      requestTime = "$context.requestTime"
-      httpMethod = "$context.httpMethod"
-      resourcePath = "$context.resourcePath"
-      status = "$context.status"
-      protocol = "$context.protocol"
-    })
-  } 
+  }   
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {

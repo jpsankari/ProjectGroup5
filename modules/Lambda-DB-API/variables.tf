@@ -13,11 +13,3 @@ provider "aws" {
   alias  = "virginia"
   region = "us-east-1"
 }
-
-variable "cloudwatch_log_group_name" {
-  type = string
-}
-
-variable "cloudwatch_log_group_arn" {
-  type = string
-}
