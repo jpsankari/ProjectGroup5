@@ -3,7 +3,7 @@
 #=========================================
 module "Lambda-DB_log_group" {
   source          = "../CloudWatch"
-  name             = "/aws/oneclickbouquet/my-api-logs-${var.env}"
+  name             = "/aws/oneclickbouquet/oneclickbouquet-api-logs-${var.env}"
   retention_in_days = 1
   log_stream_name    = "myapp-log-stream"
   /*
