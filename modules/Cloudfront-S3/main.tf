@@ -100,6 +100,20 @@ resource "aws_cloudwatch_log_group" "central_log_group" {
   retention_in_days = 1
 }
 
+resource "aws_cloudwatch_log_stream" "s3_log_stream" {
+  name           = "/aws/oneclickbouquet/s3-log-stream"
+  log_group_name = aws_cloudwatch_log_group.central_log_group.name
+}
+
+resource "aws_cloudwatch_log_stream" "dynamodb_log_stream" {
+  name           = "/aws/oneclickbouquet/dynamodb-log-stream"
+  log_group_name = aws_cloudwatch_log_group.central_log_group.name
+}
+
+resource "aws_cloudwatch_log_stream" "api_gateway_log_stream" {
+  name           = "/aws/oneclickbouquet/api-gateway-log-stream"
+  log_group_name = aws_cloudwatch_log_group.central_log_group.name
+}
 
 
 #==================================================
