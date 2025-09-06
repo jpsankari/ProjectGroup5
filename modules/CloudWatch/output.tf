@@ -7,7 +7,3 @@ output "log_stream_name" {
   value       = aws_cloudwatch_log_stream.this.name
 }
 
-output "metric_filter_name" {
-  description = "Name of the CloudWatch Metric Filter"
-  value       = aws_cloudwatch_metric_filter.this.name
-}
