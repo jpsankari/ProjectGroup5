@@ -92,21 +92,6 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 }
 
 #==================================================
-# Cloud Watch
-#================================================
-resource "aws_cloudwatch_log_group" "central_log_group" {
-  provider          = aws.virginia
-  name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
-  retention_in_days = 1
-}
-
-resource "aws_cloudwatch_log_stream" "s3_log_stream" {
-  name           = "/aws/oneclickbouquet/s3-log-stream"
-  log_group_name = aws_cloudwatch_log_group.central_log_group.name
-}
-
-
-#==================================================
 # WAFv2 for CloudFront
 #================================================
 

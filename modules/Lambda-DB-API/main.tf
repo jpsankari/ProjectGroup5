@@ -255,8 +255,20 @@ resource "aws_api_gateway_stage" "api_stage" {
   variables = {
     lambdaAlias = var.env
   }
-   
-
+   access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.central_log_group.arn
+    format          = jsonencode({
+      requestId = "$context.requestId"
+      ip        = "$context.identity.sourceIp"
+      caller    = "$context.identity.caller"
+      user      = "$context.identity.user"
+      requestTime = "$context.requestTime"
+      httpMethod = "$context.httpMethod"
+      resourcePath = "$context.resourcePath"
+      status = "$context.status"
+      protocol = "$context.protocol"
+    })
+  }
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {
@@ -271,8 +283,21 @@ resource "aws_lambda_permission" "api_gateway_permission" {
 # Cloud Watch
 #================================================
 
-
+#==================================================
+# Cloud Watch
+#================================================
+resource "aws_cloudwatch_log_group" "central_log_group" {
+  provider          = aws.virginia
+  name              = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}"
+  retention_in_days = 1
+}
 /*
+resource "aws_cloudwatch_log_stream" "s3_log_stream" {
+  name           = "/aws/oneclickbouquet/${aws_wafv2_web_acl.oneclickbouquet_cloudfront_waf.name}/s3-log-stream"
+  log_group_name = aws_cloudwatch_log_group.central_log_group.name
+}
+*/
+
 resource "aws_cloudwatch_log_stream" "dynamodb_log_stream" {
   name           = "/aws/oneclickbouquet/dynamodb-log-stream"
   log_group_name = aws_cloudwatch_log_group.central_log_group.name
@@ -283,4 +308,3 @@ resource "aws_cloudwatch_log_stream" "api_gateway_log_stream" {
   log_group_name = aws_cloudwatch_log_group.central_log_group.name
 }
 
-*/
