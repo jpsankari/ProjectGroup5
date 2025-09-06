@@ -170,6 +170,7 @@ resource "aws_wafv2_web_acl" "oneclickbouquet_cloudfront_waf" {
 }
 
 resource "aws_wafv2_ip_set" "malicious_ips" {
+  provider = aws.virginia
   name               = "malicious-ip-set"
   description        = "Block known malicious IPs"
   scope              = "CLOUDFRONT"
