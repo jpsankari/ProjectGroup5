@@ -1,3 +1,5 @@
+
+
 #=========================================
 # DynamoDB Table
 #=========================================
@@ -256,6 +258,22 @@ resource "aws_api_gateway_stage" "api_stage" {
     lambdaAlias = var.env
   }
   
+  access_log_settings {
+    destination_arn = module.aws_cloudwatch_log_group.central_log_group.arn
+    format          = jsonencode({
+      requestId       = "$context.requestId",
+      ip              = "$context.identity.sourceIp",
+      caller          = "$context.identity.caller",
+      user            = "$context.identity.user",
+      requestTime     = "$context.requestTime",
+      httpMethod      = "$context.httpMethod",
+      resourcePath    = "$context.resourcePath",
+      status          = "$context.status",
+      protocol        = "$context.protocol",
+      responseLength  = "$context.responseLength"
+    })
+  }
+
 }
 
 resource "aws_lambda_permission" "api_gateway_permission" {
