@@ -1,5 +1,5 @@
 module "cloudfront" {
-  source = "../modules/cloudfront"  
+  source = "../cloudfront"  
 }
 
 #=========================================
