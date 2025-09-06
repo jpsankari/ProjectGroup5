@@ -60,31 +60,6 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_policy" {
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3ObjectLambdaExecutionRolePolicy"
 }
-#=======================================
-# IAM Policy for Lambda to access SES
-#========================================
-resource "aws_iam_policy" "lambda_ses_policy" {
-  name = "lambda_ses_policy_${var.env}"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "ses:SendEmail",
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-}
-
-# Attach SES policy to Lambda execution role
-resource "aws_iam_role_policy_attachment" "lambda_exec_role_ses" {
-  role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = aws_iam_policy.lambda_ses_policy.arn
-}
 
 #========================================
 # Lambda Function for processing orders
