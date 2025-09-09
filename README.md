@@ -3,8 +3,8 @@
 ## Team Member:
 
 1. Cathrina
-2. John Bosco
-3. Sandhya Karanam
+2. John
+3. Sandhya
 4. Sivasankari
 5. Vincent 
 
@@ -62,7 +62,6 @@
 |-- scripts
         |-- run-intgration-test.sh
 |-- lambda_function.py
-|-- process_order.zip
 |-- README.md
 </pre>
 
