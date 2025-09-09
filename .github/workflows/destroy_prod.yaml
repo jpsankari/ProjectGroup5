@@ -7,9 +7,8 @@ on:
         description: "Type 'DESTROY' to confirm Terraform destroy"
         required: true
 
-env:            
-  AWS_REGION: ap-southeast-1  
-  CONFIG_DIRECTORY: "./envs/prod"
+env:
+  AWS_REGION: ap-southeast-1"
 
 
 permissions:
@@ -117,3 +116,4 @@ jobs:
           name: terraform-destroy-logs
           path: ./envs/prod/terraform_destroy.log
           if-no-files-found: ignore
+
