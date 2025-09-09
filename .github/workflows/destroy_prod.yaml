@@ -70,7 +70,7 @@ jobs:
 
       - name: Get API URL from Terraform output
         run: |
-            API_URLhttps://6tm8u1045i.execute-api.ap-southeast-1.amazonaws.com/prod"
+            API_URL="https://6tm8u1045i.execute-api.ap-southeast-1.amazonaws.com/prod"
             if [ -n "$API_URL" ]; then
               echo "API_URL=$API_URL" >> $GITHUB_ENV
             else
@@ -115,5 +115,6 @@ jobs:
           name: terraform-destroy-logs
           path: ./envs/prod/terraform_destroy.log
           if-no-files-found: ignore
+
 
 
