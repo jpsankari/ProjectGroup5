@@ -3,7 +3,7 @@
 ## Team Member:
 
 1. Cathrina
-2. JohnBosco
+2. John Bosco
 3. Sandhya Karanam
 4. Sivasankari
 5. Vincent 
