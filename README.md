@@ -14,6 +14,8 @@ The platform was designed to facilitate the ordering of unique, fresh flower bou
 Every flower in this bouquet is a reminder that beauty blooms even in the smallest moments!
 </pre>
 
+## Presenter - Sandhya
+
 ## 🌸 Serverless Cloud-Native E-Commerce Platform
 
 This capstone project implements a serverless, cloud-native e-commerce platform for selling flowers for various occasions. The solution emphasizes high availability, operational efficiency, security, and a seamless customer experience.
@@ -73,13 +75,10 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 2. IAM Policies – Enforce strict least-privilege access for AWS resources (S3, Lambda, etc.).
 3. Data Protection – Managed SSL/TLS certificates via ACM to secure data in transit.
 
-📚 Tech Stack
+## Presenter - John
 
-- Frontend: HTML, CSS
-- Backend: Python
-- Infrastructure: Terraform
+## 🎯 Importance
 
-🎯 Importance
 This initiative demonstrates the benefits of deployment automation and modern DevOps practices, highlighting how small-scale businesses can leverage cloud-native solutions to:
 
 - Improve operational efficiency
@@ -87,24 +86,61 @@ This initiative demonstrates the benefits of deployment automation and modern De
 - Enhance scalability and security
 - Deliver a superior customer experience
 
+## Presentor: Cathrina
+
+📚 Tech Stack
+
+- Frontend: HTML and CSS for designing and building the user interface.
+- Backend: Python for implementing business logic and server-side processing.
+- Infrastructure: Terraform for designing, provisioning, and managing cloud resources as code.
+
 ## 💰 Summary Estimate (per month)
 
-| Service                                  | Estimated Cost (USD)   |
-| ---------------------------------------- | ---------------------- |
-| AWS Compute (EC2 / Lambda)               | $10 – $30              |
-| Amazon S3 (Storage)                      | $12                    |
-| DynamoDB (NoSQL DB)                      | $3.5                   |
-| CloudFront (CDN)                         | $90                    |
-| AWS WAF (Web Application Firewall)       | $16                    |
-| CloudWatch (Monitoring)                  | $4                     |
-| Route 53 (DNS & Hosted Zones)            | $1                     |
-| ACM (SSL Certificates)                   | $0                     |
-| GitHub Actions (CI/CD – Free Tier)       | $0                     |
-| Snyk (Security – Free Tier)              | $0                     |
-| Integration Testing                      | $0                     |
-| ---------------------------------------- | ---------------------- |
+| Service                            | Estimated Cost (USD) |
+| ---------------------------------- | -------------------- |
+| AWS Compute (EC2 / Lambda)         | $10 – $30            |
+| Amazon S3 (Storage)                | $12                  |
+| DynamoDB (NoSQL DB)                | $3.5                 |
+| CloudFront (CDN)                   | $90                  |
+| AWS WAF (Web Application Firewall) | $16                  |
+| CloudWatch (Monitoring)            | $4                   |
+| Route 53 (DNS & Hosted Zones)      | $1                   |
+| ACM (SSL Certificates)             | $0                   |
+| GitHub Actions (CI/CD – Free Tier) | $0                   |
+| Snyk (Security – Free Tier)        | $0                   |
+| Integration Testing                | $0                   |
+
+---
 
 **👉 Total Estimated Cost:** ~ **$136.5 – $156.5 per month**
+
+**👉 Forecast Table**
+| Period | Estimated Total Monthly Cost (USD)|
+|-------------|-----------------------------------|
+| Now | $136.5 – $156.5 |
+| 3 Months | $165 – $200 |
+| 6 Months | $200 – $245 |
+| 12 Months | $265 – $320 |
+
+---
+
+## 📈 Scenario Highlights
+
+### 🚀 Traffic Surge Scenario (+25% Bandwidth & Compute)
+
+If you expect a product launch or viral growth:
+
+- **CloudFront** may rise to $120+
+- **EC2/Lambda** to $40–$50
+- **Overall monthly cost:** $300–$400
+
+### 🧊 Low-Usage / Static Scenario
+
+If usage remains flat:
+
+- **Monthly cost remains stable:** $136–$160
+
+## Presenter - Vincent
 
 ## 📚 The Project File Structue and Directory
 
@@ -162,3 +198,17 @@ This initiative demonstrates the benefits of deployment automation and modern De
 ├── README.md
 └── requirements.txt
 </pre>
+
+## Presenter - Sankari
+
+👨‍💻 Project Demonstration
+
+Please scan the QR Code:
+
+- Production QR:
+
+![Alt text](public/prod_qr.png)
+
+- Development QR:
+
+![Alt text](public/dev_qr.png)
