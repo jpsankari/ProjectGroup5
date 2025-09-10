@@ -75,7 +75,7 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 2. IAM Policies – Enforce strict least-privilege access for AWS resources (S3, Lambda, etc.).
 3. Data Protection – Managed SSL/TLS certificates via ACM to secure data in transit.
 
-📚 Tech Stack
+## 📚 Tech Stack
 
 - Frontend: HTML and CSS for designing and building the user interface.
 - Backend: Python for implementing business logic and server-side processing.
@@ -83,7 +83,7 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 - 
 ## Presenter - John
 
-## 🎯 Importance
+### 🎯 Importance
 
 This initiative demonstrates the benefits of deployment automation and modern DevOps practices, highlighting how small-scale businesses can leverage cloud-native solutions to:
 
