@@ -143,6 +143,7 @@ If usage remains flat:
 ## Presenter - Vincent
 
 ## Architecture Diagram:
+1. AWS Services and Website Overview
 ![Alt text](public/Aws-SPA-XMLFile.svg)
 
 ## 📚 The Project File Structue and Directory
