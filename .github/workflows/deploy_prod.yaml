@@ -1,6 +1,6 @@
 name: Full PROD Deployment
 
-run-name: ${{ github.actor }} is deploying to PROD 🚀
+run-name: CE10-Group5 is deploying to PROD 🚀
 
 #on:
  # workflow_dispatch:
@@ -128,4 +128,5 @@ jobs:
             Please review the logs above.
             Reply with **approve** to continue, or **deny** to stop.
   
+
 
