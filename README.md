@@ -142,6 +142,9 @@ If usage remains flat:
 
 ## Presenter - Vincent
 
+## Architecture Diagram:
+![Alt text](public/Aws-SPA-XMLFile.svg)
+
 ## 📚 The Project File Structue and Directory
 
 <pre>
