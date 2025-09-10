@@ -1,6 +1,6 @@
 name: Full DEV Deployment
 
-run-name: CE10-Group5 is deploying to dev 🚀
+run-name: CE10-Group5 is deploying to DEV 🚀
 
 on:
   workflow_dispatch:
@@ -169,6 +169,7 @@ jobs:
 
 
    
+
 
 
 
