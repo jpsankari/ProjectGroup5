@@ -2,8 +2,6 @@ name: Full PROD Deployment
 
 run-name: CE10-Group5 is deploying to PROD 🚀
 
-#on:
- # workflow_dispatch:
 on:
   workflow_run:
     workflows: ["Full DEV Deployment"]   # Must match the name from dev.yml
@@ -58,9 +56,9 @@ jobs:
   CD:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    needs: 
-      - CI
-      - approval
+    needs: CI
+    environment: dev
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -107,26 +105,4 @@ jobs:
 
       - name: Output CF domain
         run: echo "🚀 Deployed to https://${{ env.CF_DOMAIN }}"
-
-  approval:
-    runs-on: ubuntu-latest
-    needs: CI
-    permissions:
-      issues: write
-    timeout-minutes: 1440
-    steps:
-      - name: Manual Approval
-        uses: trstringer/manual-approval@v1.9.1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          #approvers: laoniu-meow,sandhyakaranam88,cathyloi,johnboscos,jpsankari
-          approvers: jpsankari,sandhyakaranam88
-          minimum-approvals: 1
-          issue-title: "🚦 Deploy to Production?"
-          issue-body: |
-            ✅ Integration tests passed.
-            Please review the logs above.
-            Reply with **approve** to continue, or **deny** to stop.
   
-
-
