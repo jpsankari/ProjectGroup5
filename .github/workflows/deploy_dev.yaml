@@ -1,6 +1,6 @@
 name: Full DEV Deployment
 
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: CE10-Group5 is testing out GitHub Actions 🚀
 
 on:
   workflow_dispatch:
@@ -200,6 +200,7 @@ jobs:
 
 
    
+
 
 
 
