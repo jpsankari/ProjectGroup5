@@ -144,6 +144,20 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 └── requirements.txt
 </pre>
 
+## Presenter - Sankari
+
+### 👨‍💻 Project Demonstration
+
+Please scan the QR Code:
+
+- Production QR:
+
+![Alt text](public/prod_qr.png)
+
+- Development QR:
+
+![Alt text](public/dev_qr.png)
+
 ## Presenter - John
 
 ### 🎯 Importance
@@ -202,17 +216,3 @@ If you expect a product launch or viral growth:
 If usage remains flat:
 
 - **Monthly cost remains stable:** $136–$160
-
-## Presenter - Sankari
-
-👨‍💻 Project Demonstration
-
-Please scan the QR Code:
-
-- Production QR:
-
-![Alt text](public/prod_qr.png)
-
-- Development QR:
-
-![Alt text](public/dev_qr.png)
