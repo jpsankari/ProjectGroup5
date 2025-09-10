@@ -116,7 +116,8 @@ jobs:
 
   CD:
     runs-on: ubuntu-latest
-    needs: approval
+ #   needs: approval
+    environment: dev
     
     steps:
       - name: Checkout
@@ -169,37 +170,38 @@ jobs:
         run: echo "${{ env.CF_DOMAIN }}"
 
 
-  approval:
-    runs-on: ubuntu-latest
-    needs: integration-tests
-    permissions:
-      issues: write
-    timeout-minutes: 1440
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: integration-results
+  # approval:
+  #   runs-on: ubuntu-latest
+  #   needs: integration-tests
+  #   permissions:
+  #     issues: write
+  #   timeout-minutes: 1440
+  #   steps:
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: integration-results
 
-      - name: Print integration test results
-        run: cat result.log
+  #     - name: Print integration test results
+  #       run: cat result.log
 
-      - name: Manual Approval
-        uses: trstringer/manual-approval@v1.9.1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          #approvers: laoniu-meow,sandhyakaranam88,cathyloi,johnboscos,jpsankari
-          approvers: jpsankari,sandhyakaranam88
-          minimum-approvals: 1
-          issue-title: "🚦 Please approve to deploy UAT environment before production."
-          issue-body: |
-            ✅ Integration tests passed.
+  #     - name: Manual Approval
+  #       uses: trstringer/manual-approval@v1.9.1
+  #       with:
+  #         secret: ${{ secrets.GITHUB_TOKEN }}
+  #         #approvers: laoniu-meow,sandhyakaranam88,cathyloi,johnboscos,jpsankari
+  #         approvers: jpsankari,sandhyakaranam88
+  #         minimum-approvals: 1
+  #         issue-title: "🚦 Please approve to deploy UAT environment before production."
+  #         issue-body: |
+  #           ✅ Integration tests passed.
 
-            Please review the logs above.
-            Reply with **approve** to continue, or **deny** to stop.
+  #           Please review the logs above.
+  #           Reply with **approve** to continue, or **deny** to stop.
   
 
 
    
+
 
 
 
