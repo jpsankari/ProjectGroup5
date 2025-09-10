@@ -90,58 +90,64 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 ## 📚 The Project File Structue and Directory
 
 <pre>
-/cp-cohort10-group5-capstone-grp5
-├── .github/
-│   └── workflows/
-│       ├── deploy_dev.yaml
-│       ├── deploy_prod.yaml
-│       ├── destroy_dev.yaml
-│       └── destroy_prod.yaml
-├── .git/ (hidden directory)
-├── envs/
-│   ├── dev/
-│   │   ├── backend.tf
-│   │   ├── data.tf
-│   │   ├── dev.tfvars
-│   │   ├── main.tf
-│   │   ├── output.tf
-│   │   ├── provider.tf
-│   │   └── versions.tf
-│   └── prod/
-│       ├── backend.tf
-│       ├── data.tf
-│       ├── main.tf
-│       ├── output.tf
-│       ├── prd.tfvars
-│       ├── provider.tf
-│       └── versions.tf
-├── modules/
-│   ├── Cloudfront-S3/
-│   │   ├── data.tf
-│   │   ├── main.tf
-│   │   ├── output.tf
-│   │   └── variables.tf
-│   ├── CloudWatch/
-│   │   ├── main.tf
-│   │   ├── output.tf
-│   │   └── variables.tf
-│   └── Lambda-DB-API/
-│       ├── main.tf
-│       ├── output.tf
-│       └── variables.tf
-├── scripts/
-│   └── run-integration-tests.sh
-├── static-website/
-│   ├── images/
-│   │   ├── 1.jpeg
-│   │   ├── 2.jpeg
-│   │   ├── 3.jpeg
-│   │   ├── 4.jpeg
-│   │   └── bgImage.jpg
-│   └── index.html
-├── lambda_function.py
-├── README.md
-└── requirements.txt
+ProjectGroup5/
+├── .github/                        # GitHub configuration
+│   └── workflows/                  # GitHub Actions workflows
+│       ├── deploy_dev.yaml         # DEV deployment workflow
+│       ├── deploy_prod.yaml        # PROD deployment workflow
+│       ├── destroy_dev.yaml        # DEV destruction workflow
+│       └── destroy_prod.yaml       # PROD destruction workflow
+├── .gitignore                      # Git ignore rules
+├── README.md                       # Project & Presentation documentation
+├── lambda_function.py              # AWS Lambda function
+├── requirements.txt                # Python dependencies
+├── envs/                           # Terraform environments
+│   ├── dev/                        # Development environment
+│   │   ├── .terraform.lock.hcl     # Terraform lock file
+│   │   ├── backend.tf              # Backend configuration
+│   │   ├── data.tf                 # Data sources
+│   │   ├── dev.tfvars              # Development variables
+│   │   ├── main.tf                 # Main configuration
+│   │   ├── output.tf               # Output definitions
+│   │   ├── provider.tf             # Provider configuration
+│   │   └── versions.tf             # Version constraints
+│   └── prod/                       # Production environment
+│       ├── .terraform.lock.hcl     # Terraform lock file
+│       ├── backend.tf              # Backend configuration
+│       ├── data.tf                 # Data sources
+│       ├── main.tf                 # Main configuration
+│       ├── output.tf               # Output definitions
+│       ├── prd.tfvars              # Production variables
+│       ├── provider.tf             # Provider configuration
+│       └── versions.tf             # Version constraints
+├── modules/                        # Terraform modules
+│   ├── CloudWatch/                 # CloudWatch monitoring module
+│   │   ├── main.tf                 # CloudWatch resources
+│   │   ├── output.tf               # CloudWatch outputs
+│   │   └── variables.tf            # CloudWatch variables
+│   ├── Cloudfront-S3/              # CDN and storage module
+│   │   ├── data.tf                 # Data sources
+│   │   ├── main.tf                 # CloudFront/S3 resources
+│   │   ├── output.tf               # CloudFront/S3 outputs
+│   │   └── variables.tf            # CloudFront/S3 variables
+│   └── Lambda-DB-API/              # Serverless API module
+│       ├── main.tf                 # Lambda/API Gateway resources
+│       ├── output.tf               # API/Lambda outputs
+│       └── variables.tf            # API/Lambda variables
+├── public/                         # Public assets
+│   ├── Aws-SPA-XMLFile.svg         # AWS architecture diagram
+│   ├── dev_qr.png                  # Development QR code
+│   └── prod_qr.png                 # Production QR code
+├── scripts/                        # Automation scripts
+│   └── run-integration-tests.sh    # Integration testing script
+└── static-website/                 # Website files
+    ├── index.html                  # Main website file
+    └── images/                     # Website images
+        ├── 1.jpeg                  # Image asset
+        ├── 2.jpeg                  # Image asset
+        ├── 3.jpeg                  # Image asset
+        ├── 4.jpeg                  # Image asset
+        └── bgImage.jpg             # Background image
 </pre>
 
 ## Presenter - Sankari
