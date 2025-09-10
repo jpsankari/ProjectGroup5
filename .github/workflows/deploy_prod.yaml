@@ -16,7 +16,6 @@ jobs:
   CI:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    environment: prod
 
     steps:
       - name: Checkout
@@ -57,7 +56,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     needs: CI
-    environment: dev
+    environment: prod
     
     steps:
       - name: Checkout
@@ -106,3 +105,4 @@ jobs:
       - name: Output CF domain
         run: echo "🚀 Deployed to https://${{ env.CF_DOMAIN }}"
   
+
