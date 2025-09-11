@@ -6,15 +6,13 @@ module "Lambda-DB_log_group" {
   name             = "/aws/oneclickbouquet/oneclickbouquet-api-logs-${var.env}"
   retention_in_days = 1
   log_stream_name    = "myapp-log-stream"
-  /*
   metric_filter_name = "ErrorCountFilter"
   metric_filter_pattern = "{ $.level = \"ERROR\" }"
   metric_name        = "ErrorCount"
   metric_namespace   = "MyApp/Metrics"
   metric_value       = "1"
   metric_unit        = "Count"
-  */
-  tags = {
+    tags = {
     Environment = "${var.env}"
     Project     = "oneclickbouquet-MyAPI"
   }
