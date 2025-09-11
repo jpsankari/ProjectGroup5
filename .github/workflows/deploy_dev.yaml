@@ -148,9 +148,9 @@ jobs:
         run: |
           echo "### Deployment Summary"
           echo "- CloudFront Distribution ID: ${{ env.CF_ID }}"
-          echo "- CloudFront Domain: https://"${{ env.CF_DOMAIN }}"
+          echo "- CloudFront Domain: https://${{ env.CF_DOMAIN }}"
           echo "- S3 Bucket Name: s3://${{ env.S3_NAME}}"
-          echo "- API Endpoint: "${{ env.$API_ENDPOINT}}"
+          echo "- API Endpoint: ${{ env.$API_ENDPOINT}}"
   
         
   integration-tests:
@@ -176,6 +176,7 @@ jobs:
 
 
    
+
 
 
 
