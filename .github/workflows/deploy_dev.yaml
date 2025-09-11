@@ -164,11 +164,19 @@ jobs:
         with:
           name: integration-results
           path: result.log
- 
+
+      - name: Deployment Summary
+        run: |
+          echo "### Deployment Summary"
+          echo "- CloudFront Distribution ID: $CF_ID"
+          echo "- CloudFront Domain: https://$CF_DOMAIN"
+          echo "- S3 Bucket Name: $S3_NAME"
+          echo "- API Endpoint: $API_ENDPOINT"
   
 
 
    
+
 
 
 
