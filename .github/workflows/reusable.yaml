@@ -13,5 +13,8 @@ on:
         required: true
       aws_region:
         required: true
-          
+  
+  jobs:
+    terraform:
+      runs-on: ubuntu-latest
       
