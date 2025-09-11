@@ -31,8 +31,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::255945442255:role/sankari-github-oidc-deploy-role
-          aws-region: ap-southeast-1
+          role-to-assume: ${{ secrets.aws_role_arn }}
+          aws-region: ${{ secrets.aws_region }}
       
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
