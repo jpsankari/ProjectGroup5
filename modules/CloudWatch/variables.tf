@@ -70,3 +70,8 @@ variable "alarm_actions" {
   type    = list(string)
   default = []
 }
+
+variable "env" {
+  type    = string
+  default = ""
+}
