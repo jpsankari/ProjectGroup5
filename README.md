@@ -149,9 +149,11 @@ ProjectGroup5/
 </pre>
 
 1. AWS Services and Website Overview
+
 ![Alt text](public/Aws-SPA-XMLFile.svg)
 
 2. CICD Pipeline Diagram
+
 ![Alt text](public/Project-CICD.svg)
 
 ## Presenter - Sankari
