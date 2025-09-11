@@ -71,7 +71,4 @@ variable "alarm_actions" {
   default = []
 }
 
-variable "env" {
-  type    = string
-  default = ""
-}
+
