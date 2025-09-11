@@ -12,7 +12,12 @@ module "Lambda-DB_log_group" {
   metric_namespace   = "MyApp/Metrics"
   metric_value       = "1"
   metric_unit        = "Count"
-    tags = {
+  enable_alarm        = true
+  alarm_name          = "APIErrorAlarm-${var.env}"
+  alarm_threshold     = 5
+  alarm_period        = 300
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  tags = {
     Environment = "${var.env}"
     Project     = "oneclickbouquet-MyAPI"
   }
