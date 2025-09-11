@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "this" {
-  name              = var.name
+  name               name = "/aws/lambda/my-api-${var.env}"
   retention_in_days = var.retention_in_days
   tags              = var.tags
 }
