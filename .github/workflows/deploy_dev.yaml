@@ -172,24 +172,3 @@ jobs:
         with:
           name: integration-results
           path: result.log
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
