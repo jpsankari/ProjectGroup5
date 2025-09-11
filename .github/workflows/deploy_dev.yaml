@@ -151,7 +151,7 @@ jobs:
           echo "- CloudFront Domain: https://${{ env.CF_DOMAIN }}"
           echo "- S3 Bucket Name: s3://${{ env.S3_NAME}}"
           echo "- API Endpoint: ${{ env.API_ENDPOINT}}"
-  
+          echo "- URL :  https://oneclickbouquet.sctp-sandbox.com"  
         
   integration-tests:
     runs-on: ubuntu-latest
@@ -172,4 +172,5 @@ jobs:
         with:
           name: integration-results
           path: result.log
+
 
