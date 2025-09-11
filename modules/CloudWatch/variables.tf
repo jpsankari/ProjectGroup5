@@ -5,6 +5,10 @@ variable "tags" {
   default = {}
 }
 
+variable "env" {
+  type = string
+}
+
 variable "log_stream_name" {
   type    = string
   default = null
