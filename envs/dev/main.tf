@@ -22,3 +22,4 @@ module "cloudwatch" {
   providers = {
     aws = aws.cloudwatch
   }
+}
