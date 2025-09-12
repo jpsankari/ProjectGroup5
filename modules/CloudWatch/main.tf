@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 module "cloudwatch" {
-  source = "./modules/cloudwatch"
+  source = "../../modules/CloudWatch"
   name   = "cloudwatch-log-group"
   env    = "production"
 }
