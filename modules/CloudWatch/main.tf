@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"  # adjust as needed
+  region = "ap-southeast-1"  # adjust as needed
 }
 
 # Create an S3 bucket to store CloudTrail logs
