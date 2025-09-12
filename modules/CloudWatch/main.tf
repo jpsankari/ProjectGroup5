@@ -1,40 +1,81 @@
-resource "aws_cloudwatch_log_group" "this" {
-  name              = var.name
-  retention_in_days = var.retention_in_days
-  tags              = var.tags
+provider "aws" {
+  region = "us-east-1"  # adjust as needed
 }
 
-resource "aws_cloudwatch_log_stream" "this" {
-  count          = var.log_stream_name != null ? 1 : 0
-  name           = var.log_stream_name
-  log_group_name = aws_cloudwatch_log_group.this.name
-}
+# Create an S3 bucket to store CloudTrail logs
+resource "aws_s3_bucket" "cloudtrail_bucket" {
+  bucket = "oneclickbouquet-cloudtrail-logs-bucket"  # change to your unique name
 
-resource "aws_cloudwatch_log_metric_filter" "this" {
-  count          = var.metric_filter_name != null ? 1 : 0
-  name           = var.metric_filter_name
-  log_group_name = aws_cloudwatch_log_group.this.name
-  pattern        = var.metric_filter_pattern
-
-  metric_transformation {
-    name      = var.metric_name
-    namespace = var.metric_namespace
-    value     = var.metric_value
-    unit      = var.metric_unit
+  # Optional: lock bucket to prevent deletion
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "error_alarm" {
-  count                = var.enable_alarm ? 1 : 0
-  alarm_name           = var.alarm_name
-  comparison_operator  = "GreaterThanThreshold"
-  evaluation_periods   = 1
-  metric_name          = var.metric_name
-  namespace            = var.metric_namespace
-  period               = var.alarm_period
-  statistic            = "Sum"
-  threshold            = var.alarm_threshold
-  alarm_description    = "Alarm when ${var.metric_name} exceeds ${var.alarm_threshold}"
-  treat_missing_data   = "notBreaching"
-  alarm_actions        = var.alarm_actions
+# Create a CloudWatch Log Group for CloudTrail
+resource "aws_cloudwatch_log_group" "cloudtrail" {
+  name              = "/aws/oneclickbouquet/cloudtrail/mytrail"
+  retention_in_days = 90
+}
+
+# IAM Role for CloudTrail to write logs to CloudWatch Logs
+resource "aws_iam_role" "cloudtrail_role" {
+  name = "cloudtrail-cloudwatch-logs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = {
+        Service = "cloudtrail.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# IAM Policy for the role, allowing logs write permission
+resource "aws_iam_role_policy" "cloudtrail_policy" {
+  name = "cloudtrail-cloudwatch-logs-policy"
+  role = aws_iam_role.cloudtrail_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "logs:PutLogEvents",
+        "logs:CreateLogStream"
+      ]
+      Resource = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
+    }]
+  })
+}
+
+# Create the CloudTrail
+resource "aws_cloudtrail" "mytrail" {
+  name                          = "my-s3-cloudtrail"
+  s3_bucket_name                = aws_s3_bucket.cloudtrail_bucket.bucket
+  include_global_service_events = true
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
+
+  # Send CloudTrail logs to CloudWatch Logs
+  cloud_watch_logs_group_arn = aws_cloudwatch_log_group.cloudtrail.arn
+  cloud_watch_logs_role_arn  = aws_iam_role.cloudtrail_role.arn
+
+  event_selector {
+    read_write_type           = "All"
+    include_management_events = true
+
+    data_resource {
+      type   = "AWS::S3::Object"
+      values = ["arn:aws:s3:::"]
+    }
+  }
+}
+
+# Example S3 bucket you want to monitor
+resource "aws_s3_bucket" "mybucket" {
+  bucket = "prod-oneclickbouquet-static-site"  # change to your unique bucket name
 }
