@@ -3,10 +3,3 @@ provider "aws" {
   alias  = "cloudwatch"
 }
 
-module "cloudwatch" {
-  source  = "./modules/cloudwatch"
-
-  providers = {
-    aws = aws.cloudwatch
-  }
-}
