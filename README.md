@@ -4,7 +4,7 @@
 
 1. Cathrina
 2. John
-3. Sandhyakaranam
+3. Sandhya
 4. Sivasankari
 5. Vincent
 
