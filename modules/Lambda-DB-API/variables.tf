@@ -9,7 +9,3 @@ variable "aws_region" {
   default     = "ap-southeast-1"  
 }
 
-provider "aws" {
-  alias  = "virginia"
-  region = "us-east-1"
-}
