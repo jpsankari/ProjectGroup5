@@ -17,7 +17,7 @@ module "lambda-db-api" {
 }
 
 module "cloudwatch" {
-  source = "../../modules/cloudwatch"
+ source = "../../modules/cloudwatch"
 
   providers = {
     aws = aws.cloudwatch
