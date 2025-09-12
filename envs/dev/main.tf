@@ -16,3 +16,7 @@ module "lambda-db-api" {
   env    = local.env
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
+  # no need for separate provider block if you want to inherit root provider
+}
