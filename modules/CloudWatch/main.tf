@@ -1,3 +1,12 @@
 provider "aws" {
-  region = "ap-southeast-1"  # adjust as needed
+  region = "us-east-1"
+  alias  = "cloudwatch"
+}
+
+module "cloudwatch" {
+  source  = "./modules/cloudwatch"
+
+  providers = {
+    aws = aws.cloudwatch
+  }
 }
