@@ -84,8 +84,6 @@ Deployment automation through Infrastructure as Code (IaC) and CI/CD pipelines.
 ## Presenter - Vincent
 
 ## Architecture Diagram:
-1. AWS Services and Website Overview
-![Alt text](public/Aws-SPA-XMLFile.svg)
 
 ## 📚 The Project File Structue and Directory
 
@@ -149,6 +147,14 @@ ProjectGroup5/
         ├── 4.jpeg                  # Image asset
         └── bgImage.jpg             # Background image
 </pre>
+
+1. AWS Services and Website Overview
+
+![Alt text](public/Aws-SPA-XMLFile.svg)
+
+2. CICD Pipeline Diagram
+
+![Alt text](public/Project-CICD.svg)
 
 ## Presenter - Sankari
 
