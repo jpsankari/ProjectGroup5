@@ -16,4 +16,9 @@ module "lambda-db-api" {
   env    = local.env
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
 
+  providers = {
+    aws = aws.cloudwatch
+  }
