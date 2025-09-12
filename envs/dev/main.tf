@@ -16,9 +16,3 @@ module "lambda-db-api" {
   env    = local.env
 }
 
-module "cloudwatch" {
-  source = "../../modules/CloudWatch"
-  env    = local.env
-  name   = "/aws/oneclickbouquet/my-api-logs-${local.env}"
-
-}
