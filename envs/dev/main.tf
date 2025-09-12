@@ -17,6 +17,6 @@ module "lambda-db-api" {
 }
 
 module "cloudwatch" {
-  source = "../../modules/cloudwatch"
+  source = "../../modules/CloudWatch"
   # no need for separate provider block if you want to inherit root provider
 }
