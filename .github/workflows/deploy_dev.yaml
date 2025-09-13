@@ -14,36 +14,36 @@ permissions:
   id-token: write      # <- This is required for OIDC
   contents: read
 
-# snyk-scan:
-#     runs-on: ubuntu-latest
-#     steps:
-#        - uses: actions/checkout@v3
-#        - name: Install Snyk CLI
-#          run: npm install -g snyk
+  snyk-scan:
+     runs-on: ubuntu-latest
+     steps:
+        - uses: actions/checkout@v3
+        - name: Install Snyk CLI
+          run: npm install -g snyk
 
-#        - name: Authenticate with Snyk
-#          run: snyk auth ${{ secrets.SNYK_TOKEN }}
+        - name: Authenticate with Snyk
+          run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
-#        - name: Scan Terraform IaC
-#          run: |
-#            cd modules
-#            snyk iac test --severity-threshold=critical
-#          continue-on-error: true
-#          shell: bash
+        - name: Scan Terraform IaC
+          run: |
+            cd modules
+            snyk iac test --severity-threshold=critical
+          continue-on-error: true
+          shell: bash
 
-#        - name: Set up Python (for Python Lambdas)
-#          uses: actions/setup-python@v5
-#          with:
-#           python-version: '3.11' 
+        - name: Set up Python (for Python Lambdas)
+          uses: actions/setup-python@v5
+          with:
+           python-version: '3.11' 
 
-#        - name: Run Snyk Test (Python)
-#          run: |
-#             if [ -f requirements.txt ]; then
-#             pip install -r requirements.txt
-#               snyk test --file=requirements.txt --package-manager=pip --severity-threshold=critical
-#             else
-#               echo "No requirements.txt found. Skipping Snyk Python scan."
-#             fi
+        - name: Run Snyk Test (Python)
+          run: |
+             if [ -f requirements.txt ]; then
+             pip install -r requirements.txt
+               snyk test --file=requirements.txt --package-manager=pip --severity-threshold=critical
+             else
+               echo "No requirements.txt found. Skipping Snyk Python scan."
+             fi
             
 jobs:
   CI:
