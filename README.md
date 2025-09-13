@@ -1,6 +1,6 @@
 # CapstoneProject-DevOps-CICDpipeline Group 5
 
-## Team Member:
+## Team Member
 
 1. Cathrina
 2. John
